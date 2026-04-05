@@ -131,9 +131,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       {/* Page Transition Overlay */}
       <div
         ref={overlayRef}
-        className="fixed inset-0 bg-gradient-to-br from-brand-dark to-brand-celeste z-[9999] pointer-events-none transform -translate-x-full flex items-center justify-center"
+        className="fixed inset-0 bg-[#1a3a5c] z-[9999] pointer-events-none transform -translate-x-full flex items-center justify-center"
       >
-        <img src="/vp-logo-icono.png" alt="VP" className="w-20 h-20 opacity-30 animate-pulse" />
+        <img src="/vp-logo-icono.png" alt="VP" className="w-40 h-auto opacity-60 animate-pulse object-contain" />
       </div>
 
       {/* Navbar */}

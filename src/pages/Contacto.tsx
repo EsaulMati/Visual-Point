@@ -285,10 +285,10 @@ export default function Contacto() {
   return (
     <div
       ref={containerRef}
-      className="w-full bg-[#FCFCFC] overflow-hidden pb-20 md:pb-40 font-sans"
+      className="w-full bg-[#FCFCFC] overflow-hidden pb-12 md:pb-20 font-sans"
     >
       {/* HERO SECTION */}
-      <section className="relative pt-24 pb-24 md:pt-32 md:pb-32 px-6 md:px-20 text-left led-grid">
+      <section className="relative pt-24 pb-16 md:pt-32 md:pb-20 px-6 md:px-20 text-left led-grid">
         <div className="absolute top-0 left-0 right-0 h-[60vh] bg-gradient-to-br from-brand-celeste/10 to-transparent -z-10" />
         <div className="max-w-7xl mx-auto space-y-10">
           <div className="space-y-6">
@@ -311,7 +311,7 @@ export default function Contacto() {
       </section>
 
       {/* FORM MASTER SECTION */}
-      <section className="px-6 md:px-20 pb-32">
+      <section className="px-6 md:px-20 pb-16">
         <div className="max-w-7xl mx-auto">
           <div className="bg-white rounded-[64px] border border-gray-100 shadow-[0_50px_120px_-30px_rgba(0,40,86,0.12)] p-8 md:p-20 relative">
             <div className="absolute -top-1 px-6 md:px-12 py-3 md:py-4 bg-brand-dark text-white rounded-full text-[9px] md:text-[12px] uppercase font-black tracking-[0.2em] md:tracking-[0.5em] translate-y-[-50%] ml-0 md:ml-12 shadow-2xl font-accent border-4 border-white">
@@ -661,13 +661,6 @@ export default function Contacto() {
         </div>
       </section>
 
-      {/* FOOTER ACCENT */}
-      <div className="tech-divider mt-32" />
-      <section className="py-24 px-6 text-center led-grid opacity-20">
-        <p className="text-[12px] font-black text-brand-dark uppercase tracking-[1.5em]">
-          Human Centric • Future Powered • Visual Point
-        </p>
-      </section>
     </div>
   );
 }

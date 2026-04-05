@@ -450,6 +450,24 @@ export default function Inicio() {
         </div>
       </section>
 
+      {/* MOBILE GALLERY - Solo visible en móvil */}
+      <section className="md:hidden py-16 px-6 bg-white">
+        <p className="text-[10px] text-brand-celeste uppercase tracking-[0.6em] font-black mb-6 text-center font-accent">
+          {HOME_DATA.hero.centerTextLabel}
+        </p>
+        <h2 className="text-2xl font-display font-black text-brand-dark mb-8 tracking-tighter text-center">
+          {HOME_DATA.hero.centerTextMain}
+          <span className="text-brand-celeste">{HOME_DATA.hero.centerTextAccent}</span>
+        </h2>
+        <div className="grid grid-cols-2 gap-4">
+          {[...COL1.slice(0, 2), ...COL2.slice(0, 2)].map((src, i) => (
+            <div key={i} className="aspect-square overflow-hidden rounded-xl shadow-lg">
+              <img src={src} alt="" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+            </div>
+          ))}
+        </div>
+      </section>
+
       {/* TECH DIVIDER */}
       <div className="tech-divider" />
 
