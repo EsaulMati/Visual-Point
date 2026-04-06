@@ -294,7 +294,7 @@ export default function Contacto() {
           <div className="space-y-6">
             <div className="flex items-center gap-3 animate-fade-in">
               <div className="w-10 h-[1px] bg-brand-celeste" />
-              <span className="text-brand-celeste font-black text-xs tracking-[0.5em] uppercase">
+              <span className="text-brand-celeste font-black text-xs tracking-widest uppercase">
                 Visual Point
               </span>
             </div>
@@ -314,7 +314,7 @@ export default function Contacto() {
       <section className="px-6 md:px-20 pb-16">
         <div className="max-w-7xl mx-auto">
           <div className="bg-white rounded-[64px] border border-gray-100 shadow-[0_50px_120px_-30px_rgba(0,40,86,0.12)] p-8 md:p-20 relative">
-            <div className="absolute -top-1 px-6 md:px-12 py-3 md:py-4 bg-brand-dark text-white rounded-full text-[9px] md:text-[12px] uppercase font-black tracking-[0.2em] md:tracking-[0.5em] translate-y-[-50%] ml-0 md:ml-12 shadow-2xl font-accent border-4 border-white">
+            <div className="absolute -top-1 px-6 md:px-12 py-3 md:py-4 bg-brand-dark text-white rounded-full text-[9px] md:text-[12px] uppercase font-black tracking-wider md:tracking-widest translate-y-[-50%] ml-0 md:ml-12 shadow-2xl font-accent border-4 border-white">
               Formulario de Contacto • Visual Point
             </div>
 
@@ -641,7 +641,7 @@ export default function Contacto() {
                     disabled={isSubmitting}
                     className={`group relative flex items-center justify-center space-x-6 w-full max-w-xs mx-auto p-6 rounded-full text-white transition-all duration-700 shadow-xl ${isSubmitting ? "bg-gray-400 opacity-50 cursor-not-allowed" : "bg-brand-dark hover:bg-brand-celeste hover:scale-[1.02] active:scale-95"}`}
                   >
-                    <span className="text-lg font-display font-black tracking-[0.4em] uppercase pl-2">
+                    <span className="text-lg font-display font-black tracking-widest uppercase pl-2">
                       {isSubmitting ? "..." : "ENVIAR"}
                     </span>
                     {!isSubmitting && (
@@ -660,7 +660,6 @@ export default function Contacto() {
           </div>
         </div>
       </section>
-
     </div>
   );
 }

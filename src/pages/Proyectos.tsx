@@ -92,7 +92,7 @@ export default function Proyectos() {
           <div className="space-y-4">
             <div className="flex items-center gap-3 reveal-hero">
               <div className="w-8 h-[1px] bg-brand-celeste" />
-              <span className="text-brand-celeste font-black text-[10px] tracking-[0.4em] uppercase">
+              <span className="text-brand-celeste font-black text-[10px] tracking-widest uppercase">
                 Visual Impact
               </span>
             </div>
@@ -164,7 +164,7 @@ export default function Proyectos() {
 
                 {/* Vertical Metadata Label (Editorial Style) */}
                 <div className="absolute -right-8 top-12 hidden xl:block origin-left -rotate-90">
-                  <p className="text-[10px] text-brand-dark/20 uppercase tracking-[0.6em] font-black">
+                  <p className="text-[10px] text-brand-dark/20 uppercase tracking-widest font-black">
                     VP CASE STUDY • NO {project.id}
                   </p>
                 </div>
@@ -185,7 +185,7 @@ export default function Proyectos() {
       {/* FINAL TECH FOOTER ACCENT */}
       <div className="tech-divider" />
       <section className="py-20 px-6 text-center led-grid opacity-30">
-        <p className="text-[10px] font-black text-brand-dark/20 uppercase tracking-[1em]">
+        <p className="text-[10px] font-black text-brand-dark/20 uppercase tracking-widest">
           Ingeniería • Impacto • Visión
         </p>
       </section>

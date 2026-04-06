@@ -71,37 +71,40 @@ function HexagonItem({ benefit, index }: HexagonProps) {
   const Icon = benefit.icon;
   return (
     <div
-      className={`hex-wrapper relative group w-[260px] h-[300px] sm:w-[300px] sm:h-[345px] md:w-[320px] md:h-[368px] flex-shrink-0`}
+      className={`hex-wrapper relative group w-[260px] h-[300px] sm:w-[300px] sm:h-[345px] md:w-[300px] md:h-[345px] flex-shrink-0`}
     >
       <div
-        className="hex-content absolute inset-0 bg-white border border-gray-100 shadow-lg flex flex-col items-center justify-center p-5 sm:p-8 md:p-10 text-center transition-all duration-500 group-hover:bg-brand-celeste group-hover:text-white group-hover:border-transparent group-hover:-translate-y-4"
+        className="hex-content absolute inset-0 bg-brand-celeste border-transparent shadow-lg flex flex-col items-center justify-start pt-10 pb-8 px-6 sm:px-8 text-center md:bg-white md:border md:border-gray-100 transition-all duration-500 md:group-hover:bg-brand-celeste md:group-hover:text-white md:group-hover:border-transparent md:group-hover:-translate-y-3"
         style={{
           clipPath:
             "polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)",
         }}
       >
-        <div className="mb-3 sm:mb-6 text-brand-celeste group-hover:text-white transition-all duration-500 transform group-hover:scale-125">
-          <Icon size={52} strokeWidth={1} />
+        {/* Icono */}
+        <div className="mb-3 text-white md:text-brand-celeste md:group-hover:text-white transition-all duration-500 transform md:group-hover:scale-110">
+          <Icon size={36} strokeWidth={1.5} />
         </div>
 
-        <div className="space-y-2 transition-all duration-300 group-hover:translate-y-[-10px]">
-          <h4 className="font-display font-black text-lg sm:text-2xl leading-tight group-hover:text-white">
+        {/* Título y subtítulo */}
+        <div className="space-y-1 mb-3">
+          <h4 className="font-display font-black text-lg sm:text-xl leading-tight text-white md:text-brand-dark md:group-hover:text-white">
             {benefit.title}
           </h4>
-          <p className="text-xs uppercase tracking-[0.2em] font-bold text-brand-celeste group-hover:text-white/80">
+          <p className="text-[10px] uppercase tracking-wider font-bold text-white/80 md:text-brand-celeste md:group-hover:text-white/80">
             {benefit.subtitle}
           </p>
         </div>
 
-        <div className="absolute inset-x-8 bottom-12 opacity-0 group-hover:opacity-100 transition-all duration-500 translate-y-4 group-hover:translate-y-0">
-          <p className="text-sm leading-relaxed font-light text-white/90">
+        {/* Descripción - siempre visible en móvil, hover en desktop */}
+        <div className="flex-1 flex items-center px-2 md:opacity-0 md:group-hover:opacity-100 transition-all duration-400">
+          <p className="text-xs leading-relaxed font-light text-white/90 line-clamp-4">
             {benefit.desc}
           </p>
         </div>
       </div>
 
       <div
-        className="absolute inset-0 -z-10 opacity-0 group-hover:opacity-30 blur-[40px] bg-brand-celeste transition-all duration-700 scale-110"
+        className="absolute inset-0 -z-10 opacity-20 md:opacity-0 md:group-hover:opacity-30 blur-2xl bg-brand-celeste transition-all duration-700 scale-110"
         style={{
           clipPath:
             "polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)",
@@ -153,7 +156,7 @@ export default function Nosotros() {
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-16 items-center">
           <div className="space-y-8">
             <div className="space-y-4">
-              <span className="reveal-text inline-block text-brand-celeste font-black text-[10px] tracking-[0.4em] uppercase">
+              <span className="reveal-text inline-block text-brand-celeste font-black text-[10px] tracking-widest uppercase">
                 Visual Point
               </span>
               <h1 className="reveal-text text-4xl sm:text-6xl md:text-8xl font-display font-black text-brand-dark leading-[0.85] tracking-tighter">
@@ -207,16 +210,15 @@ export default function Nosotros() {
           </div>
 
           {/* Optimized Honeycomb Grid */}
-          <div className="hex-container flex flex-wrap justify-center gap-x-12 md:gap-x-[-20px] gap-y-12">
+          <div className="hex-container flex flex-wrap justify-center gap-4 md:gap-6 lg:gap-8">
             {BENEFITS.slice(0, 4).map((b, i) => (
               <HexagonItem key={i} benefit={b} index={i} />
             ))}
-            <div className="w-full h-0 md:h-12 hidden md:block" />
-            <div className="flex flex-wrap justify-center gap-x-12 md:translate-x-[0px] mt-2 sm:mt-[-40px]">
-              {BENEFITS.slice(4).map((b, i) => (
-                <HexagonItem key={i + 4} benefit={b} index={i + 4} />
-              ))}
-            </div>
+          </div>
+          <div className="flex flex-wrap justify-center gap-4 md:gap-6 lg:gap-8 mt-4 md:-mt-8">
+            {BENEFITS.slice(4).map((b, i) => (
+              <HexagonItem key={i + 4} benefit={b} index={i + 4} />
+            ))}
           </div>
         </div>
       </section>
@@ -227,7 +229,7 @@ export default function Nosotros() {
       {/* VALORES SECTION - ALINEADA IZQUIERDA */}
       <section className="py-32 px-6 md:px-20 bg-[#FCFCFC]">
         <div className="max-w-7xl mx-auto mb-20 text-left">
-          <h3 className="text-brand-celeste font-bold text-[10px] tracking-[0.4em] uppercase mb-4">
+          <h3 className="text-brand-celeste font-bold text-[10px] tracking-widest uppercase mb-4">
             Filosofía VisualPoint
           </h3>
           <h2 className="text-3xl md:text-4xl font-display font-bold text-brand-dark">
@@ -236,7 +238,7 @@ export default function Nosotros() {
           <div className="w-8 h-1 bg-brand-celeste mt-4" />
         </div>
 
-        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 text-left">
+        <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-12 text-left">
           {[
             {
               icon: Shield,
@@ -259,15 +261,19 @@ export default function Nosotros() {
               desc: "Cuidado milimétrico en cada proyecto.",
             },
           ].map((val, idx) => (
-            <div key={idx} className="reveal-text group space-y-6">
-              <div className="w-16 h-16 bg-white border border-gray-100 rounded-2xl flex items-center justify-center text-brand-celeste group-hover:bg-brand-celeste group-hover:text-white transition-all duration-500 shadow-sm">
-                <val.icon size={28} strokeWidth={1.5} />
+            <div key={idx} className="reveal-text group space-y-4 md:space-y-6">
+              <div className="w-12 h-12 md:w-16 md:h-16 bg-brand-celeste md:bg-white border border-transparent md:border-gray-100 rounded-xl md:rounded-2xl flex items-center justify-center text-white md:text-brand-celeste md:group-hover:bg-brand-celeste md:group-hover:text-white transition-all duration-500 shadow-sm">
+                <val.icon
+                  size={24}
+                  strokeWidth={1.5}
+                  className="md:w-7 md:h-7"
+                />
               </div>
-              <div className="space-y-3">
-                <h4 className="text-xl font-bold text-brand-dark uppercase tracking-wide">
+              <div className="space-y-2 md:space-y-3">
+                <h4 className="text-base md:text-xl font-bold text-brand-dark uppercase tracking-wide">
                   {val.title}
                 </h4>
-                <p className="text-text-secondary leading-relaxed text-sm">
+                <p className="text-text-secondary leading-relaxed text-xs md:text-sm">
                   {val.desc}
                 </p>
               </div>

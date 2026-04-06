@@ -125,7 +125,7 @@ export default function Productos() {
         <div className="max-w-7xl mx-auto relative z-10">
           <div className="max-w-3xl space-y-8">
             <div className="space-y-4">
-              <span className="section-header inline-block text-brand-celeste font-black text-[12px] tracking-[0.4em] uppercase">
+              <span className="section-header inline-block text-brand-celeste font-black text-[12px] tracking-widest uppercase">
                 Ecosistema Visual
               </span>
               <h1 className="section-header text-4xl sm:text-5xl md:text-8xl font-display font-black text-brand-dark leading-[0.9] tracking-tighter">

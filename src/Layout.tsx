@@ -35,7 +35,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       gestureOrientation: "vertical",
       smoothWheel: true,
       wheelMultiplier: 1,
-      touchMultiplier: 2,
+      touchMultiplier: 1.5,
       infinite: false,
     });
 
@@ -48,8 +48,13 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
     requestAnimationFrame(raf);
 
-    // Sync with ScrollTrigger
-    lenis.on("scroll", ScrollTrigger.update);
+    // Sync with ScrollTrigger and update progress bar in real-time
+    lenis.on("scroll", (e: any) => {
+      ScrollTrigger.update();
+      const progress = e.progress * 100;
+      setScrollProgress(progress);
+      setIsScrolled(e.scroll > 50);
+    });
 
     gsap.ticker.add((time) => {
       lenis.raf(time * 1000);
@@ -63,15 +68,19 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     };
   }, []);
 
-  // Scroll Listener for Navbar
+  // Scroll Listener for Navbar (fallback)
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
-      // Calculate scroll progress
-      const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
-      const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-      const scrolled = (winScroll / height) * 100;
-      setScrollProgress(scrolled);
+      if (!lenisRef.current) {
+        setIsScrolled(window.scrollY > 50);
+        const winScroll =
+          document.body.scrollTop || document.documentElement.scrollTop;
+        const height =
+          document.documentElement.scrollHeight -
+          document.documentElement.clientHeight;
+        const scrolled = (winScroll / height) * 100;
+        setScrollProgress(scrolled);
+      }
     };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
@@ -122,8 +131,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     <div className="min-h-screen flex flex-col overflow-x-hidden">
       {/* Scroll Progress Indicator */}
       <div className="fixed top-0 left-0 w-full h-[3px] bg-transparent z-[10000]">
-        <div 
-          className="h-full bg-gradient-to-r from-brand-celeste to-brand-dark transition-all duration-150 ease-out"
+        <div
+          className="h-full bg-gradient-to-r from-brand-celeste to-brand-dark"
           style={{ width: `${scrollProgress}%` }}
         />
       </div>
@@ -133,7 +142,11 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         ref={overlayRef}
         className="fixed inset-0 bg-[#1a3a5c] z-[9999] pointer-events-none transform -translate-x-full flex items-center justify-center"
       >
-        <img src="/vp-logo-icono.png" alt="VP" className="w-40 h-auto opacity-60 animate-pulse object-contain" />
+        <img
+          src="/vp-logo-icono.png"
+          alt="VP"
+          className="w-40 h-auto opacity-60 animate-pulse object-contain"
+        />
       </div>
 
       {/* Navbar */}
@@ -141,32 +154,32 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         className={cn(
           "fixed transition-all duration-700 ease-in-out z-50",
           isScrolled
-            ? "top-6 left-1/2 -translate-x-1/2 w-[calc(100%-2rem)] max-w-80 h-20 bg-white/90 backdrop-blur-xl shadow-[0_20px_50px_rgba(0,0,0,0.1)] border border-white/20 rounded-full px-8 flex items-center justify-between"
-            : "top-0 left-0 w-full h-32 bg-transparent border-none px-6 sm:px-16 flex items-center",
+            ? "top-4 left-1/2 -translate-x-1/2 w-[calc(100%-1.5rem)] max-w-md h-16 sm:h-20 bg-white/95 backdrop-blur-xl shadow-[0_20px_50px_rgba(0,0,0,0.1)] border border-white/20 rounded-full px-4 sm:px-8 flex items-center justify-between"
+            : "top-0 left-0 w-full h-24 sm:h-32 bg-transparent border-none px-4 sm:px-16 flex items-center",
         )}
       >
         {/* Scrolled State Logic */}
         {isScrolled ? (
           <>
-            {/* Left: Logo Icon (Moved significantly more left) */}
+            {/* Left: Logo Icon */}
             <Link
               to="/"
               onClick={(e) => handleNavigation(e, "/")}
-              className="flex-shrink-0 -ml-4"
+              className="flex-shrink-0"
             >
               <img
                 src="/vp-logo-icono.png"
                 alt="VP"
-                className="h-12 w-auto object-contain"
+                className="h-10 sm:h-12 w-auto object-contain"
               />
             </Link>
 
-            {/* Center: "Inicio" Link (Replaces "Menú") */}
+            {/* Center: "Inicio" Link */}
             <div className="absolute left-1/2 -translate-x-1/2">
               <Link
                 to="/"
                 onClick={(e) => handleNavigation(e, "/")}
-                className="text-brand-celeste text-sm font-bold tracking-widest uppercase hover:opacity-70 transition-opacity"
+                className="text-brand-celeste text-xs sm:text-sm font-bold tracking-wider sm:tracking-widest uppercase hover:opacity-70 transition-opacity"
               >
                 Inicio
               </Link>
@@ -204,7 +217,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                   onClick={(e) => handleNavigation(e, link.path)}
                   className={cn(
                     "nav-link relative py-1 text-sm font-bold uppercase tracking-widest transition-colors duration-300 hover:text-brand-celeste text-brand-dark/80",
-                    location.pathname === link.path && "text-brand-celeste active",
+                    location.pathname === link.path &&
+                      "text-brand-celeste active",
                   )}
                 >
                   {link.name}
@@ -273,9 +287,12 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         href="https://wa.me/51995119509"
         target="_blank"
         rel="noopener noreferrer"
-        className="fixed bottom-6 right-4 md:bottom-8 md:right-8 z-[100] w-14 h-14 md:w-16 md:h-16 bg-[#25D366] text-white rounded-full flex items-center justify-center shadow-[0_10px_30px_rgba(37,211,102,0.4)] hover:scale-110 hover:shadow-[0_15px_40px_rgba(37,211,102,0.5)] active:scale-90 transition-all duration-300 group"
+        className="fixed bottom-6 right-4 md:bottom-8 md:right-8 z-[100] w-14 h-14 md:w-16 md:h-16 bg-brand-dark text-white rounded-full flex items-center justify-center shadow-[0_10px_30px_rgba(0,40,86,0.4)] hover:bg-brand-celeste hover:scale-110 hover:shadow-[0_15px_40px_rgba(0,163,221,0.5)] active:scale-90 transition-all duration-300 group"
       >
-        <MessageCircle size={28} className="group-hover:rotate-12 transition-transform duration-300" />
+        <MessageCircle
+          size={28}
+          className="group-hover:rotate-12 transition-transform duration-300"
+        />
         <span className="absolute right-full mr-4 bg-white text-brand-dark px-4 py-2 rounded-2xl text-[10px] font-black uppercase tracking-widest opacity-0 group-hover:opacity-100 translate-x-4 group-hover:translate-x-0 transition-all whitespace-nowrap shadow-xl pointer-events-none border border-gray-100 font-accent">
           ¿En qué podemos ayudarte?
         </span>
@@ -300,7 +317,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
             {/* Column 2: Navigation Links */}
             <div className="lg:col-span-4 space-y-8">
-              <h4 className="text-[10px] font-black uppercase tracking-[0.5em] text-brand-dark/20 font-accent">
+              <h4 className="text-[10px] font-black uppercase tracking-widest text-brand-dark/20 font-accent">
                 Navegación
               </h4>
               <ul className="grid grid-cols-2 gap-y-4">
@@ -320,7 +337,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
             {/* Column 3: Contact Details */}
             <div className="lg:col-span-4 space-y-8">
-              <h4 className="text-[10px] font-black uppercase tracking-[0.5em] text-brand-dark/20 font-accent">
+              <h4 className="text-[10px] font-black uppercase tracking-widest text-brand-dark/20 font-accent">
                 Contacto Directo
               </h4>
               <div className="space-y-6">
@@ -344,7 +361,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             </div>
           </div>
 
-          <div className="border-t border-gray-50 mt-10 md:mt-24 pt-8 md:pt-12 flex flex-col md:flex-row justify-between items-center text-[9px] uppercase tracking-[0.5em] font-black text-gray-300 w-full space-y-6 md:space-y-0">
+          <div className="border-t border-gray-50 mt-10 md:mt-24 pt-8 md:pt-12 flex flex-col md:flex-row justify-between items-center text-[9px] uppercase tracking-widest font-black text-gray-300 w-full space-y-6 md:space-y-0">
             <p>© 2026 Visual Point Engineering • All Rights Reserved</p>
             <div className="flex space-x-10">
               <a

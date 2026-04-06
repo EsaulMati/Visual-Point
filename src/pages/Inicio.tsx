@@ -18,9 +18,9 @@ const HOME_DATA = {
     ctaSecondary: { text: "Ver proyectos", link: "/proyectos" },
     videoUrl:
       "https://assets.mixkit.co/videos/preview/mixkit-abstract-technology-lines-and-dots-in-blue-23265-large.mp4",
-    centerTextLabel: "Construimos nuestro propio camino",
-    centerTextMain: "Nuestra plataforma permite, por primera vez, ",
-    centerTextAccent: "escala real.",
+    centerTextLabel: "Tecnología visual de alto impacto",
+    centerTextMain: "Transformamos espacios con pantallas LED de ",
+    centerTextAccent: "máxima definición.",
   },
   stats: {
     label: "Resultados que hablan",
@@ -60,32 +60,32 @@ const BRANDS = [
 
 // ── 4 columns × 5 images each ──────────────────────────────────
 const COL1 = [
-  "https://images.unsplash.com/photo-1518770666391-9fad0d4332a5?auto=format&fit=crop&q=80&w=400",
-  "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80&w=400",
-  "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&q=80&w=400",
-  "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80&w=400",
-  "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&q=80&w=400",
+  "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?auto=format&fit=crop&q=80&w=400",
+  "https://images.unsplash.com/photo-1517292987719-0369a794ec0f?auto=format&fit=crop&q=80&w=400",
+  "https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&q=80&w=400",
+  "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?auto=format&fit=crop&q=80&w=400",
+  "https://images.unsplash.com/photo-1535016120720-40c646be5580?auto=format&fit=crop&q=80&w=400",
 ];
 const COL2 = [
-  "https://images.unsplash.com/photo-1451187580242-46619a8c1bc0?auto=format&fit=crop&q=80&w=400",
-  "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&q=80&w=400",
-  "https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&q=80&w=400",
-  "https://images.unsplash.com/photo-1531297484001-80022131f5a1?auto=format&fit=crop&q=80&w=400",
-  "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&q=80&w=400",
+  "https://images.unsplash.com/photo-1561070791-2526d30994b5?auto=format&fit=crop&q=80&w=400",
+  "https://images.unsplash.com/photo-1557804506-669a67965ba0?auto=format&fit=crop&q=80&w=400",
+  "https://images.unsplash.com/photo-1563013544-824ae1b704d3?auto=format&fit=crop&q=80&w=400",
+  "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=400",
+  "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=400",
 ];
 const COL3 = [
-  "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?auto=format&fit=crop&q=80&w=400",
-  "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=400",
-  "https://images.unsplash.com/photo-1677442135703-1787eea5ce01?auto=format&fit=crop&q=80&w=400",
-  "https://images.unsplash.com/photo-1558655146-364adaf1fcc9?auto=format&fit=crop&q=80&w=400",
-  "https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&q=80&w=400",
+  "https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?auto=format&fit=crop&q=80&w=400",
+  "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&q=80&w=400",
+  "https://images.unsplash.com/photo-1555421689-d68471e189f2?auto=format&fit=crop&q=80&w=400",
+  "https://images.unsplash.com/photo-1526628953301-3e589a6a8b74?auto=format&fit=crop&q=80&w=400",
+  "https://images.unsplash.com/photo-1573164713988-8665fc963095?auto=format&fit=crop&q=80&w=400",
 ];
 const COL4 = [
-  "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&q=80&w=400",
-  "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=400",
-  "https://images.unsplash.com/photo-1600880292089-90a7e086ee0c?auto=format&fit=crop&q=80&w=400",
-  "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=400",
+  "https://images.unsplash.com/photo-1531973576160-7125cd663d86?auto=format&fit=crop&q=80&w=400",
+  "https://images.unsplash.com/photo-1497215728101-856f4ea42174?auto=format&fit=crop&q=80&w=400",
+  "https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&q=80&w=400",
   "https://images.unsplash.com/photo-1553877522-43269d4ea984?auto=format&fit=crop&q=80&w=400",
+  "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&q=80&w=400",
 ];
 
 const GALLERY_IMGS = ["/proj1.jpg", "/proj2.jpg", "/proj3.jpg"];
@@ -113,13 +113,17 @@ function FullscreenSlider({ images }: { images: string[] }) {
             transform: i === current ? "scale(1)" : "scale(1.08)",
           }}
         >
-          <img src={img} alt={`Proyecto ${i + 1}`} className="w-full h-full object-cover" />
+          <img
+            src={img}
+            alt={`Proyecto ${i + 1}`}
+            className="w-full h-full object-cover"
+          />
           <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-white/40" />
         </div>
       ))}
 
       <div className="absolute top-1/2 left-6 md:left-20 -translate-y-1/2 z-20">
-        <span className="text-[10px] text-brand-celeste uppercase tracking-[0.5em] font-black font-accent">
+        <span className="text-[10px] text-brand-celeste uppercase tracking-widest font-black font-accent">
           VP • Portafolio
         </span>
         <h3 className="text-3xl md:text-6xl font-display font-black text-brand-dark mt-4 tracking-tighter leading-none">
@@ -135,7 +139,9 @@ function FullscreenSlider({ images }: { images: string[] }) {
             key={i}
             onClick={() => setCurrent(i)}
             className={`w-2 h-2 rounded-full transition-all duration-500 ${
-              i === current ? 'w-8 bg-brand-celeste' : 'bg-brand-dark/20 hover:bg-brand-dark/40'
+              i === current
+                ? "w-8 bg-brand-celeste"
+                : "bg-brand-dark/20 hover:bg-brand-dark/40"
             }`}
           />
         ))}
@@ -235,8 +241,8 @@ export default function Inicio() {
           scrollTrigger: {
             trigger: heroRef.current,
             start: "top top",
-            end: "+=3500",
-            scrub: 2,
+            end: "+=3000",
+            scrub: 0.5,
             pin: true,
             anticipatePin: 1,
           },
@@ -244,54 +250,38 @@ export default function Inicio() {
 
         tl.to(
           heroTextRef.current,
-          { opacity: 0, y: -150, duration: 1.2, ease: "power2.inOut" },
+          { opacity: 0, y: -100, duration: 1, ease: "none" },
           0,
         );
         tl.to(
           videoBgRef.current,
-          { y: -200, opacity: 0, duration: 1.5, ease: "power2.inOut" },
+          { y: -150, opacity: 0, duration: 1, ease: "none" },
           0,
         );
-        tl.to(".scroll-indicator", { opacity: 0, duration: 0.5 }, 0);
-        tl.to(galleryRef.current, { opacity: 1, duration: 0.6 }, 1.5);
+        tl.to(".scroll-indicator", { opacity: 0, duration: 0.3 }, 0);
+        tl.to(galleryRef.current, { opacity: 1, duration: 0.5 }, 1);
 
-        gsap.set(col1Ref.current, { y: "120vh", opacity: 1 });
-        gsap.set(col4Ref.current, { y: "120vh", opacity: 1 });
-        gsap.set(col2Ref.current, { y: "70vh", opacity: 1 });
-        gsap.set(col3Ref.current, { y: "70vh", opacity: 1 });
+        gsap.set(col1Ref.current, { y: "100vh", opacity: 1 });
+        gsap.set(col4Ref.current, { y: "100vh", opacity: 1 });
+        gsap.set(col2Ref.current, { y: "60vh", opacity: 1 });
+        gsap.set(col3Ref.current, { y: "60vh", opacity: 1 });
 
-        tl.to(
-          col1Ref.current,
-          { y: "0vh", duration: 2.5, ease: "power3.out" },
-          1.5,
-        );
-        tl.to(
-          col4Ref.current,
-          { y: "0vh", duration: 2.5, ease: "power3.out" },
-          1.5,
-        );
-        tl.to(
-          col2Ref.current,
-          { y: "0vh", duration: 2.0, ease: "power3.out" },
-          1.8,
-        );
-        tl.to(
-          col3Ref.current,
-          { y: "0vh", duration: 2.0, ease: "power3.out" },
-          1.8,
-        );
+        tl.to(col1Ref.current, { y: "0vh", duration: 2, ease: "none" }, 1);
+        tl.to(col4Ref.current, { y: "0vh", duration: 2, ease: "none" }, 1);
+        tl.to(col2Ref.current, { y: "0vh", duration: 1.5, ease: "none" }, 1.2);
+        tl.to(col3Ref.current, { y: "0vh", duration: 1.5, ease: "none" }, 1.2);
 
         tl.fromTo(
           galleryCenterRef.current,
-          { opacity: 0, y: 50 },
-          { opacity: 1, y: 0, duration: 1.5, ease: "power3.out" },
-          2.5,
+          { opacity: 0, y: 30 },
+          { opacity: 1, y: 0, duration: 1, ease: "none" },
+          2,
         );
 
-        tl.to(col1Ref.current, { y: "-90vh", duration: 6, ease: "none" }, 3);
-        tl.to(col4Ref.current, { y: "-90vh", duration: 6, ease: "none" }, 3);
-        tl.to(col2Ref.current, { y: "-55vh", duration: 6, ease: "none" }, 3);
-        tl.to(col3Ref.current, { y: "-55vh", duration: 6, ease: "none" }, 3);
+        tl.to(col1Ref.current, { y: "-80vh", duration: 5, ease: "none" }, 2.5);
+        tl.to(col4Ref.current, { y: "-80vh", duration: 5, ease: "none" }, 2.5);
+        tl.to(col2Ref.current, { y: "-50vh", duration: 5, ease: "none" }, 2.5);
+        tl.to(col3Ref.current, { y: "-50vh", duration: 5, ease: "none" }, 2.5);
 
         tl.to(
           [galleryCenterRef.current, galleryRef.current],
@@ -334,11 +324,11 @@ export default function Inicio() {
     <div className="w-full bg-white font-sans text-text-primary">
       <Helmet>
         <title>
-          Visual Point | Ingeniería Visual y Tecnología de Vanguardia
+          Visual Point | Pantallas LED y Soluciones Visuales en Perú
         </title>
         <meta
           name="description"
-          content="Líderes en soluciones tecnológicas y visualización digital en Perú. Construimos el futuro digital con escala real y precisión de ingeniería."
+          content="Líderes en venta, instalación y asesoría de pantallas LED de alto impacto en Perú. Tecnología visual de vanguardia para tu negocio."
         />
       </Helmet>
 
@@ -428,7 +418,7 @@ export default function Inicio() {
             ref={galleryCenterRef}
             className="absolute inset-0 flex flex-col items-center justify-center text-center px-[28vw] opacity-0"
           >
-            <p className="text-[10px] text-brand-celeste uppercase tracking-[0.6em] font-black mb-8 font-accent">
+            <p className="text-[10px] text-brand-celeste uppercase tracking-widest font-black mb-8 font-accent">
               {HOME_DATA.hero.centerTextLabel}
             </p>
             <h2 className="text-3xl md:text-5xl lg:text-6xl font-display font-black text-brand-dark leading-[1.1] tracking-tighter">
@@ -441,7 +431,7 @@ export default function Inicio() {
         </div>
 
         <div className="scroll-indicator absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 z-40 opacity-40">
-          <span className="text-[10px] text-brand-dark uppercase tracking-[0.4em]">
+          <span className="text-[10px] text-brand-dark uppercase tracking-wider">
             Scroll
           </span>
           <div className="w-5 h-9 border border-gray-300 rounded-full flex items-start justify-center pt-1.5">
@@ -452,17 +442,27 @@ export default function Inicio() {
 
       {/* MOBILE GALLERY - Solo visible en móvil */}
       <section className="md:hidden py-16 px-6 bg-white">
-        <p className="text-[10px] text-brand-celeste uppercase tracking-[0.6em] font-black mb-6 text-center font-accent">
+        <p className="text-[10px] text-brand-celeste uppercase tracking-widest font-black mb-6 text-center font-accent">
           {HOME_DATA.hero.centerTextLabel}
         </p>
         <h2 className="text-2xl font-display font-black text-brand-dark mb-8 tracking-tighter text-center">
           {HOME_DATA.hero.centerTextMain}
-          <span className="text-brand-celeste">{HOME_DATA.hero.centerTextAccent}</span>
+          <span className="text-brand-celeste">
+            {HOME_DATA.hero.centerTextAccent}
+          </span>
         </h2>
         <div className="grid grid-cols-2 gap-4">
           {[...COL1.slice(0, 2), ...COL2.slice(0, 2)].map((src, i) => (
-            <div key={i} className="aspect-square overflow-hidden rounded-xl shadow-lg">
-              <img src={src} alt="" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+            <div
+              key={i}
+              className="aspect-square overflow-hidden rounded-xl shadow-lg"
+            >
+              <img
+                src={src}
+                alt=""
+                className="w-full h-full object-cover"
+                referrerPolicy="no-referrer"
+              />
             </div>
           ))}
         </div>
@@ -474,7 +474,7 @@ export default function Inicio() {
       {/* MARCAS SECTION */}
       <section className="brands-section py-16 md:py-32 bg-white w-full px-6 md:px-10 led-grid">
         <div className="w-full text-center max-w-7xl mx-auto">
-          <p className="text-[10px] text-brand-celeste uppercase tracking-[0.6em] font-black mb-6 font-accent">
+          <p className="text-[10px] text-brand-celeste uppercase tracking-widest font-black mb-6 font-accent">
             Partnerships
           </p>
           <h2 className="text-4xl md:text-5xl font-display font-black text-brand-dark mb-12 md:mb-24 tracking-tighter">
@@ -483,7 +483,10 @@ export default function Inicio() {
 
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-8 md:gap-12 items-center">
             {BRANDS.map((brand, i) => (
-              <div key={i} className="brand-item group p-4 rounded-2xl hover:bg-gray-50/50 transition-all duration-500">
+              <div
+                key={i}
+                className="brand-item group p-4 rounded-2xl hover:bg-gray-50/50 transition-all duration-500"
+              >
                 <img
                   src={brand.logo}
                   alt={brand.name}
@@ -504,7 +507,7 @@ export default function Inicio() {
         className="stats-strip bg-white py-20 md:py-40 overflow-hidden w-full px-6 md:px-10 border-t border-gray-100"
       >
         <div className="w-full text-center max-w-7xl mx-auto">
-          <p className="text-[10px] text-brand-celeste uppercase tracking-[0.6em] font-black mb-8 font-accent">
+          <p className="text-[10px] text-brand-celeste uppercase tracking-widest font-black mb-8 font-accent">
             {HOME_DATA.stats.label}
           </p>
           <h2 className="text-3xl md:text-5xl xl:text-6xl font-display font-black text-brand-dark mb-16 md:mb-32 tracking-tighter">
