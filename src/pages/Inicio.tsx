@@ -291,14 +291,7 @@ export default function Inicio() {
         ease: "power3.out",
       });
 
-      gsap.from(".brand-item", {
-        scrollTrigger: { trigger: ".brands-section", start: "top 85%" },
-        y: 30,
-        opacity: 0,
-        duration: 0.8,
-        stagger: 0.1,
-        ease: "power3.out",
-      });
+      // Brand logos animation removed - they appear instantly now
 
       ScrollTrigger.create({
         trigger: statsSectionRef.current,
@@ -463,28 +456,32 @@ export default function Inicio() {
       <div className="tech-divider" />
 
       {/* MARCAS SECTION */}
-      <section className="brands-section py-16 md:py-32 bg-white w-full px-6 md:px-10 led-grid">
+      <section className="brands-section py-10 md:py-16 bg-white w-full px-6 md:px-10 led-grid">
         <div className="w-full text-center max-w-7xl mx-auto">
-          <p className="text-[10px] text-brand-celeste uppercase tracking-widest font-black mb-6 font-accent">
+          <p className="text-[10px] text-brand-celeste uppercase tracking-widest font-black mb-4 font-accent">
             Partnerships
           </p>
-          <h2 className="text-4xl md:text-5xl font-display font-black text-brand-dark mb-12 md:mb-24 tracking-tighter">
+          <h2 className="text-4xl md:text-5xl font-display font-black text-brand-dark mb-8 md:mb-12 tracking-tighter">
             Marcas con las que <span className="text-gradient">trabajamos</span>
           </h2>
 
           <div className="flex flex-wrap justify-center items-center gap-8 sm:gap-12 md:gap-16">
-            {BRANDS.map((brand, i) => (
-              <div
-                key={i}
-                className="brand-item group p-4 sm:p-6 rounded-2xl hover:bg-gray-50/50 transition-all duration-500"
-              >
-                <img
-                  src={brand.logo}
-                  alt={brand.name}
-                  className="h-12 sm:h-14 md:h-16 w-auto mx-auto object-contain grayscale opacity-50 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-500 transform group-hover:scale-110"
-                />
-              </div>
-            ))}
+            {/* NovaStar */}
+            <div className="p-4 sm:p-6">
+              <img
+                src="/NOVASTAR.png"
+                alt="NovaStar"
+                className="h-32 sm:h-40 md:h-48 lg:h-56 w-auto object-contain"
+              />
+            </div>
+            {/* Nationstar */}
+            <div className="p-4 sm:p-6">
+              <img
+                src="/Nationstar-logo.jpg"
+                alt="Nationstar"
+                className="h-12 sm:h-14 md:h-16 w-auto object-contain"
+              />
+            </div>
           </div>
         </div>
       </section>
