@@ -36,25 +36,12 @@ const HOME_DATA = {
 
 const BRANDS = [
   {
-    name: "Brand 1",
-    logo: "https://cdn.worldvectorlogo.com/logos/google-2015.svg",
+    name: "NovaStar",
+    logo: "/NOVASTAR.png",
   },
   {
-    name: "Brand 2",
-    logo: "https://cdn.worldvectorlogo.com/logos/apple-13.svg",
-  },
-  {
-    name: "Brand 3",
-    logo: "https://cdn.worldvectorlogo.com/logos/microsoft-5.svg",
-  },
-  {
-    name: "Brand 4",
-    logo: "https://cdn.worldvectorlogo.com/logos/amazon-2.svg",
-  },
-  { name: "Brand 5", logo: "https://cdn.worldvectorlogo.com/logos/meta-7.svg" },
-  {
-    name: "Brand 6",
-    logo: "https://cdn.worldvectorlogo.com/logos/tesla-9.svg",
+    name: "Nationstar",
+    logo: "/Nationstar-logo.jpg",
   },
 ];
 
@@ -130,9 +117,9 @@ function FullscreenSlider({ images }: { images: string[] }) {
         </div>
       ))}
 
-      <div className="absolute top-1/2 left-4 sm:left-6 md:left-20 -translate-y-1/2 z-20 max-w-[80%] sm:max-w-none">
-        <h3 className="text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-display font-black text-brand-dark tracking-tighter leading-none">
-          Ingeniería de <br />{" "}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 md:translate-x-0 md:left-20 -translate-y-1/2 z-20 w-[90%] sm:w-auto text-center md:text-left">
+        <h3 className="text-xl sm:text-2xl md:text-5xl lg:text-6xl font-display font-black text-brand-dark tracking-tighter leading-tight">
+          Ingeniería de <br />
           <span className="text-gradient">visualización.</span>
         </h3>
       </div>
@@ -361,10 +348,10 @@ export default function Inicio() {
 
         <div
           ref={heroTextRef}
-          className="relative z-20 w-full px-6 md:px-20 text-left max-w-7xl mx-auto pt-24 md:pt-32"
+          className="relative z-20 w-full px-4 sm:px-6 md:px-20 text-center md:text-left max-w-7xl mx-auto pt-20 sm:pt-24 md:pt-32"
         >
           <div className="hero-headline">
-            <h1 className="text-4xl sm:text-6xl md:text-8xl lg:text-[clamp(5rem,10vw,8.5rem)] font-display font-black text-brand-dark leading-[0.9] tracking-[-0.05em] mb-8">
+            <h1 className="text-3xl sm:text-5xl md:text-8xl lg:text-[clamp(5rem,10vw,8.5rem)] font-display font-black text-brand-dark leading-[0.95] tracking-[-0.04em] mb-6 sm:mb-8">
               {HOME_DATA.hero.title}
               <br />
               <span className="text-brand-celeste">
@@ -372,25 +359,25 @@ export default function Inicio() {
               </span>
             </h1>
           </div>
-          <p className="hero-sub text-lg md:text-xl text-gray-500 max-w-xl leading-relaxed mb-12 font-medium font-accent">
+          <p className="hero-sub text-base sm:text-lg md:text-xl text-gray-500 max-w-md sm:max-w-xl mx-auto md:mx-0 leading-relaxed mb-8 sm:mb-12 font-medium font-accent">
             {HOME_DATA.hero.subtitle}
           </p>
-          <div className="hero-cta flex flex-wrap gap-4 md:gap-6 mt-8 md:mt-16">
+          <div className="hero-cta flex flex-wrap justify-center md:justify-start gap-3 sm:gap-4 md:gap-6 mt-6 sm:mt-8 md:mt-16">
             <Link
               to={HOME_DATA.hero.ctaPrimary.link}
-              className="btn-shine group relative inline-flex items-center gap-6 bg-brand-dark text-white font-black px-12 py-6 rounded-full hover:bg-brand-celeste hover:shadow-[0_20px_40px_rgba(0,163,221,0.3)] transition-all duration-500 text-[10px] uppercase tracking-[0.3em] font-accent overflow-hidden"
+              className="btn-shine group relative inline-flex items-center gap-4 sm:gap-6 bg-brand-dark text-white font-black px-8 sm:px-10 md:px-12 py-4 sm:py-5 md:py-6 rounded-full hover:bg-brand-celeste hover:shadow-[0_20px_40px_rgba(0,163,221,0.3)] transition-all duration-500 text-[9px] sm:text-[10px] uppercase tracking-[0.2em] sm:tracking-[0.3em] font-accent overflow-hidden"
             >
               <span className="relative z-10">
                 {HOME_DATA.hero.ctaPrimary.text}
               </span>
               <ArrowRight
-                size={18}
-                className="relative z-10 group-hover:translate-x-2 transition-transform duration-300"
+                size={16}
+                className="relative z-10 group-hover:translate-x-2 transition-transform duration-300 sm:w-[18px] sm:h-[18px]"
               />
             </Link>
             <Link
               to={HOME_DATA.hero.ctaSecondary.link}
-              className="inline-flex items-center gap-6 border-b-2 border-brand-dark/10 py-4 text-brand-dark font-black text-[10px] uppercase tracking-[0.3em] font-accent hover:border-brand-celeste transition-all duration-300"
+              className="inline-flex items-center gap-4 sm:gap-6 border-b-2 border-brand-dark/10 py-3 sm:py-4 text-brand-dark font-black text-[9px] sm:text-[10px] uppercase tracking-[0.2em] sm:tracking-[0.3em] font-accent hover:border-brand-celeste transition-all duration-300"
             >
               {HOME_DATA.hero.ctaSecondary.text}
             </Link>
@@ -446,18 +433,18 @@ export default function Inicio() {
       </section>
 
       {/* MOBILE GALLERY - Solo visible en móvil */}
-      <section className="md:hidden py-16 px-6 bg-white">
-        <p className="text-[10px] text-brand-celeste uppercase tracking-widest font-black mb-6 text-center font-accent">
+      <section className="md:hidden py-12 px-4 bg-white">
+        <p className="text-[10px] text-brand-celeste uppercase tracking-widest font-black mb-4 text-center font-accent">
           {HOME_DATA.hero.centerTextLabel}
         </p>
-        <h2 className="text-2xl font-display font-black text-brand-dark mb-8 tracking-tighter text-center">
+        <h2 className="text-xl font-display font-black text-brand-dark mb-6 tracking-tighter text-center px-2">
           {HOME_DATA.hero.centerTextMain}
           <span className="text-brand-celeste">
             {HOME_DATA.hero.centerTextAccent}
           </span>
         </h2>
-        <div className="grid grid-cols-2 gap-4">
-          {[...COL1.slice(0, 2), ...COL2.slice(0, 2)].map((src, i) => (
+        <div className="grid grid-cols-2 gap-3">
+          {["/Imagen15.png", "/Imagen16.png", "/Imagen7.png", "/Imagen1.png"].map((src, i) => (
             <div
               key={i}
               className="aspect-square overflow-hidden rounded-xl shadow-lg"
@@ -466,7 +453,6 @@ export default function Inicio() {
                 src={src}
                 alt=""
                 className="w-full h-full object-cover"
-                referrerPolicy="no-referrer"
               />
             </div>
           ))}
@@ -486,16 +472,16 @@ export default function Inicio() {
             Marcas con las que <span className="text-gradient">trabajamos</span>
           </h2>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-8 md:gap-12 items-center">
+          <div className="flex flex-wrap justify-center items-center gap-8 sm:gap-12 md:gap-16">
             {BRANDS.map((brand, i) => (
               <div
                 key={i}
-                className="brand-item group p-4 rounded-2xl hover:bg-gray-50/50 transition-all duration-500"
+                className="brand-item group p-4 sm:p-6 rounded-2xl hover:bg-gray-50/50 transition-all duration-500"
               >
                 <img
                   src={brand.logo}
                   alt={brand.name}
-                  className="h-10 md:h-12 w-auto mx-auto object-contain grayscale opacity-40 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-500 transform group-hover:scale-110"
+                  className="h-12 sm:h-14 md:h-16 w-auto mx-auto object-contain grayscale opacity-50 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-500 transform group-hover:scale-110"
                 />
               </div>
             ))}
