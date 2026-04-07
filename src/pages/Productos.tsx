@@ -22,24 +22,28 @@ const SOLUTIONS = [
     title: "Pantallas publicitarias LED Outdoor",
     desc: "Grandes formatos para avenidas, fachadas de edificios, rooftops o mobiliario urbano.",
     icon: Maximize,
+    image: "/Outdoor.png",
   },
   {
     id: "indoor",
     title: "Pantallas LED Indoor",
     desc: "Perfectas para centros comerciales, ferias, tiendas y eventos corporativos.",
     icon: Monitor,
+    image: "/Indoor.png",
   },
   {
     id: "totems",
     title: "Tótems y paneles digitales interactivos",
     desc: "Ideales para puntos de venta, lobbies, campañas informativas y más.",
     icon: Tablet,
+    image: "/Totems.png",
   },
   {
     id: "custom",
     title: "Pantallas personalizadas",
     desc: "Nos adaptamos a tu espacio, diseño y objetivos.",
     icon: Settings,
+    image: "/Personalizada.png",
   },
 ];
 
@@ -158,33 +162,22 @@ export default function Productos() {
                   0{idx + 1}
                 </span>
 
-                {/* Product Placeholder */}
-                <div className="relative aspect-video bg-gray-50/50 backdrop-blur-sm rounded-[48px] border border-gray-100 overflow-hidden flex items-center justify-center transition-all duration-700 group-hover:border-brand-celeste/20 group-hover:shadow-[0_40px_80px_-20px_rgba(0,183,235,0.15)] group-hover:-translate-y-4">
-                  {/* Glass Accent */}
-                  <div className="absolute inset-0 bg-gradient-to-br from-white/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-
-                  {/* Subtle technical lines pattern */}
-                  <div
-                    className="absolute inset-0 opacity-[0.02] pointer-events-none"
-                    style={{
-                      backgroundImage:
-                        "linear-gradient(90deg, #000 1px, transparent 1px), linear-gradient(#000 1px, transparent 1px)",
-                      backgroundSize: "50px 50px",
-                    }}
+                {/* Product Image */}
+                <div className="relative aspect-video bg-gray-50/50 backdrop-blur-sm rounded-[48px] border border-gray-100 overflow-hidden transition-all duration-700 group-hover:border-brand-celeste/20 group-hover:shadow-[0_40px_80px_-20px_rgba(0,183,235,0.15)] group-hover:-translate-y-4">
+                  {/* Product Image */}
+                  <img
+                    src={item.image}
+                    alt={item.title}
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                   />
 
-                  {/* Icon with glowing core */}
-                  <div className="relative z-10">
-                    <div className="absolute inset-0 bg-brand-celeste/10 blur-2xl group-hover:bg-brand-celeste/30 transition-all duration-700 scale-150" />
-                    <div className="relative text-brand-celeste/40 group-hover:text-brand-celeste transition-all duration-700 transform group-hover:scale-110">
-                      <item.icon size={100} strokeWidth={0.5} />
-                    </div>
-                  </div>
+                  {/* Glass Overlay on hover */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-brand-dark/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
 
                   {/* Precision Label */}
-                  <div className="absolute bottom-10 left-10 flex items-center gap-3">
+                  <div className="absolute bottom-6 left-6 flex items-center gap-3 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
                     <div className="w-2 h-2 rounded-full bg-brand-celeste animate-pulse" />
-                    <span className="text-[10px] uppercase font-bold tracking-widest text-brand-dark/30 group-hover:text-brand-celeste transition-colors duration-500">
+                    <span className="text-[10px] uppercase font-bold tracking-widest text-white">
                       VP SOLUCIÓN: {item.id}
                     </span>
                   </div>
@@ -225,10 +218,9 @@ export default function Productos() {
           {/* Large Industry Image - Like Screenshot */}
           <div className="relative w-full aspect-[21/9] bg-gray-100 rounded-[40px] overflow-hidden shadow-2xl border border-gray-100">
             <img
-              src="https://images.unsplash.com/photo-1497215728101-856f4ea42174?auto=format&fit=crop&q=80&w=2000"
+              src="/Imagen17.png"
               alt="Industria LED Impacto"
               className="w-full h-full object-cover opacity-90 group-hover:scale-105 transition-transform duration-[3s]"
-              referrerPolicy="no-referrer"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
           </div>

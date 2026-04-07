@@ -60,35 +60,43 @@ const BRANDS = [
 
 // ── 4 columns × 5 images each ──────────────────────────────────
 const COL1 = [
-  "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?auto=format&fit=crop&q=80&w=400",
-  "https://images.unsplash.com/photo-1517292987719-0369a794ec0f?auto=format&fit=crop&q=80&w=400",
-  "https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&q=80&w=400",
-  "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?auto=format&fit=crop&q=80&w=400",
-  "https://images.unsplash.com/photo-1535016120720-40c646be5580?auto=format&fit=crop&q=80&w=400",
+  "/Imagen15.png",
+  "/Imagen3.png",
+  "/Imagen19.png",
+  "/Imagen8.jpeg",
+  "/Imagen12.png",
 ];
 const COL2 = [
-  "https://images.unsplash.com/photo-1561070791-2526d30994b5?auto=format&fit=crop&q=80&w=400",
-  "https://images.unsplash.com/photo-1557804506-669a67965ba0?auto=format&fit=crop&q=80&w=400",
-  "https://images.unsplash.com/photo-1563013544-824ae1b704d3?auto=format&fit=crop&q=80&w=400",
-  "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=400",
-  "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=400",
+  "/Imagen6.png",
+  "/Imagen20.png",
+  "/Imagen1.png",
+  "/Imagen14.png",
+  "/Imagen9.jpeg",
 ];
 const COL3 = [
-  "https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?auto=format&fit=crop&q=80&w=400",
-  "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&q=80&w=400",
-  "https://images.unsplash.com/photo-1555421689-d68471e189f2?auto=format&fit=crop&q=80&w=400",
-  "https://images.unsplash.com/photo-1526628953301-3e589a6a8b74?auto=format&fit=crop&q=80&w=400",
-  "https://images.unsplash.com/photo-1573164713988-8665fc963095?auto=format&fit=crop&q=80&w=400",
+  "/Imagen17.png",
+  "/Imagen4.png",
+  "/Imagen11.png",
+  "/Imagen7.png",
+  "/Imagen16.png",
 ];
 const COL4 = [
-  "https://images.unsplash.com/photo-1531973576160-7125cd663d86?auto=format&fit=crop&q=80&w=400",
-  "https://images.unsplash.com/photo-1497215728101-856f4ea42174?auto=format&fit=crop&q=80&w=400",
-  "https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&q=80&w=400",
-  "https://images.unsplash.com/photo-1553877522-43269d4ea984?auto=format&fit=crop&q=80&w=400",
-  "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&q=80&w=400",
+  "/Imagen2.png",
+  "/Imagen18.png",
+  "/Imagen5.png",
+  "/Imagen13.png",
+  "/Imagen10.jpeg",
 ];
 
-const GALLERY_IMGS = ["/proj1.jpg", "/proj2.jpg", "/proj3.jpg"];
+// Imágenes del carrusel de proyectos destacados
+const GALLERY_IMGS = [
+  "/Cato11.png",
+  "/Cato10.png",
+  "/Cato1.png",
+  "/Cato2.png",
+  "/Cato3.png",
+  "/Cato5.png",
+];
 
 function FullscreenSlider({ images }: { images: string[] }) {
   const [current, setCurrent] = useState(0);
@@ -116,17 +124,14 @@ function FullscreenSlider({ images }: { images: string[] }) {
           <img
             src={img}
             alt={`Proyecto ${i + 1}`}
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover saturate-[0.85] brightness-[1.02]"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-white/40" />
+          <div className="absolute inset-0 bg-gradient-to-t from-white/50 via-transparent to-white/20" />
         </div>
       ))}
 
-      <div className="absolute top-1/2 left-6 md:left-20 -translate-y-1/2 z-20">
-        <span className="text-[10px] text-brand-celeste uppercase tracking-widest font-black font-accent">
-          VP • Portafolio
-        </span>
-        <h3 className="text-3xl md:text-6xl font-display font-black text-brand-dark mt-4 tracking-tighter leading-none">
+      <div className="absolute top-1/2 left-4 sm:left-6 md:left-20 -translate-y-1/2 z-20 max-w-[80%] sm:max-w-none">
+        <h3 className="text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-display font-black text-brand-dark tracking-tighter leading-none">
           Ingeniería de <br />{" "}
           <span className="text-gradient">visualización.</span>
         </h3>
