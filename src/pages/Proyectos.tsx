@@ -480,27 +480,26 @@ export default function Proyectos() {
         <div className="absolute inset-0 led-grid opacity-[0.02]" />
         <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-brand-celeste/5 to-transparent" />
 
-        <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-20">
-          <div className="max-w-4xl">
-            <div className="flex items-center gap-4 reveal-up mb-8">
-              <span className="text-brand-celeste font-black text-xs tracking-[0.2em] uppercase">
-                Portafolio
-              </span>
-              <div className="h-px w-16 bg-brand-celeste/30" />
-            </div>
-
-            <h1 className="reveal-up text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-display font-black text-brand-dark leading-[0.95] tracking-tight mb-8">
-              Proyectos
-              <br />
-              <span className="text-brand-celeste">ejecutados</span>
-            </h1>
-
-            <p className="reveal-up text-lg md:text-xl text-text-secondary max-w-2xl leading-relaxed">
-              Descubra cómo hemos transformado espacios corporativos, educativos
-              y de salud con soluciones de visualización LED de última
-              generación.
-            </p>
+        <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-20 text-center">
+          <div className="flex items-center justify-center gap-4 reveal-up mb-8">
+            <div className="h-px w-16 bg-brand-celeste/30" />
+            <span className="text-brand-celeste font-black text-xs tracking-[0.2em] uppercase">
+              Portafolio
+            </span>
+            <div className="h-px w-16 bg-brand-celeste/30" />
           </div>
+
+          <h1 className="reveal-up text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-display font-black text-brand-dark leading-[0.95] tracking-tight mb-8">
+            Proyectos
+            <br />
+            <span className="text-brand-celeste">ejecutados</span>
+          </h1>
+
+          <p className="reveal-up text-lg md:text-xl text-text-secondary max-w-4xl mx-auto leading-relaxed">
+            Descubra cómo hemos transformado espacios corporativos, educativos
+            y de salud con soluciones de visualización LED de última
+            generación.
+          </p>
         </div>
       </section>
 
@@ -547,7 +546,7 @@ export default function Proyectos() {
                   </div>
 
                   {/* Description */}
-                  <div className="max-w-3xl mb-12">
+                  <div className="w-full mb-12">
                     {project.description.split("\n\n").map((p, i) => (
                       <p
                         key={i}
