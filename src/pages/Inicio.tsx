@@ -352,7 +352,7 @@ export default function Inicio() {
               </span>
             </h1>
           </div>
-          <p className="hero-sub text-base sm:text-lg md:text-xl text-gray-500 max-w-md sm:max-w-xl mx-auto md:mx-0 leading-relaxed mb-8 sm:mb-12 font-medium font-accent">
+          <p className="hero-sub text-base sm:text-lg md:text-xl text-gray-500 max-w-md sm:max-w-xl mx-auto md:mx-0 leading-relaxed mb-8 sm:mb-12 font-medium font-accent text-justify">
             {HOME_DATA.hero.subtitle}
           </p>
           <div className="hero-cta flex flex-wrap justify-center md:justify-start gap-3 sm:gap-4 md:gap-6 mt-6 sm:mt-8 md:mt-16">

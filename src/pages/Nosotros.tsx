@@ -97,7 +97,7 @@ function HexagonItem({ benefit, index }: HexagonProps) {
 
         {/* Descripción - siempre visible en móvil, hover en desktop */}
         <div className="flex-1 flex items-center px-2 md:opacity-0 md:group-hover:opacity-100 transition-all duration-400">
-          <p className="text-xs leading-relaxed font-light text-white/90 line-clamp-4">
+          <p className="text-xs leading-relaxed font-light text-white/90 line-clamp-4 text-justify">
             {benefit.desc}
           </p>
         </div>
@@ -165,7 +165,7 @@ export default function Nosotros() {
               </h1>
             </div>
 
-            <p className="reveal-text text-xl md:text-2xl text-brand-dark font-medium leading-normal max-w-xl">
+            <p className="reveal-text text-xl md:text-2xl text-brand-dark font-medium leading-normal max-w-xl text-justify">
               VisualPoint es una empresa especializada en la{" "}
               <span className="text-brand-celeste underline decoration-brand-celeste/30 underline-offset-8">
                 venta, instalación y asesoría
@@ -176,7 +176,7 @@ export default function Nosotros() {
 
           <div className="reveal-text bg-white p-6 sm:p-10 md:p-14 rounded-[40px] border border-gray-100 shadow-sm relative">
             <div className="absolute top-0 left-0 w-2 h-full bg-brand-celeste/20 rounded-l-[40px]" />
-            <p className="text-lg md:text-xl text-text-secondary leading-relaxed italic font-light">
+            <p className="text-lg md:text-xl text-text-secondary leading-relaxed italic font-light text-justify">
               "Con años de experiencia en el rubro, ofrecemos soluciones
               modernas, eficientes y personalizadas para negocios que desean
               aumentar su visibilidad y destacar frente a la competencia."
@@ -202,7 +202,7 @@ export default function Nosotros() {
               ¿Por qué <br />
               <span className="text-brand-celeste">elegirnos?</span>
             </h2>
-            <p className="text-lg md:text-xl text-text-secondary font-light max-w-xl">
+            <p className="text-lg md:text-xl text-text-secondary font-light max-w-xl text-justify">
               Nuestra ingeniería visual combina robustez de hardware con una
               experiencia de software intuitiva para resultados sin igual.
             </p>
@@ -273,7 +273,7 @@ export default function Nosotros() {
                 <h4 className="text-base md:text-xl font-bold text-brand-dark uppercase tracking-wide">
                   {val.title}
                 </h4>
-                <p className="text-text-secondary leading-relaxed text-xs md:text-sm">
+                <p className="text-text-secondary leading-relaxed text-xs md:text-sm text-justify">
                   {val.desc}
                 </p>
               </div>

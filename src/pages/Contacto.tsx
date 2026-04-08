@@ -303,7 +303,7 @@ export default function Contacto() {
               <span className="text-brand-celeste">tu impacto.</span>
             </h1>
           </div>
-          <p className="text-xl md:text-3xl text-text-secondary leading-tight max-w-2xl font-light">
+          <p className="text-xl md:text-3xl text-text-secondary leading-tight max-w-2xl font-light text-justify">
             Lleva tu comunicación visual al siguiente nivel con soporte técnico
             especializado y tecnología de punta.
           </p>
@@ -327,7 +327,7 @@ export default function Contacto() {
                   <h2 className="text-5xl font-display font-black text-brand-dark tracking-tighter">
                     ¡Mensaje Enviado!
                   </h2>
-                  <p className="text-xl text-text-secondary max-w-md mx-auto">
+                  <p className="text-xl text-text-secondary max-w-md mx-auto text-justify">
                     Tu mensaje fue enviado, recibirás un mensaje de nuestro
                     equipo a la brevedad posible.
                   </p>

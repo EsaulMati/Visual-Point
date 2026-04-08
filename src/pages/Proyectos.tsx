@@ -495,7 +495,7 @@ export default function Proyectos() {
             <span className="text-brand-celeste">ejecutados</span>
           </h1>
 
-          <p className="reveal-up text-lg md:text-xl text-text-secondary max-w-4xl mx-auto leading-relaxed">
+          <p className="reveal-up text-lg md:text-xl text-text-secondary max-w-4xl mx-auto leading-relaxed text-justify">
             Descubra cómo hemos transformado espacios corporativos, educativos
             y de salud con soluciones de visualización LED de última
             generación.
@@ -550,7 +550,7 @@ export default function Proyectos() {
                     {project.description.split("\n\n").map((p, i) => (
                       <p
                         key={i}
-                        className="text-text-secondary text-base md:text-lg leading-relaxed mb-4 last:mb-0"
+                        className="text-text-secondary text-base md:text-lg leading-relaxed mb-4 last:mb-0 text-justify"
                       >
                         {p}
                       </p>
@@ -586,7 +586,7 @@ export default function Proyectos() {
           <h3 className="text-3xl md:text-4xl font-display font-black text-brand-dark mb-4 tracking-tight">
             ¿Tiene un proyecto en mente?
           </h3>
-          <p className="text-text-secondary text-lg mb-8 max-w-xl mx-auto">
+          <p className="text-text-secondary text-lg mb-8 max-w-xl mx-auto text-justify">
             Contáctenos para una consultoría personalizada sobre soluciones LED
             para su organización.
           </p>

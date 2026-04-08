@@ -138,7 +138,7 @@ export default function Productos() {
               </h1>
             </div>
 
-            <p className="section-header text-xl md:text-2xl text-brand-dark/70 leading-relaxed font-light">
+            <p className="section-header text-xl md:text-2xl text-brand-dark/70 leading-relaxed font-light text-justify">
               Ofrecemos una amplia gama de soluciones LED de alto impacto para
               potenciar la visibilidad de tu marca en cualquier entorno.
             </p>
@@ -191,7 +191,7 @@ export default function Productos() {
                     </h3>
                     <div className="w-0 group-hover:w-16 h-1 bg-brand-celeste transition-all duration-700" />
                   </div>
-                  <p className="text-lg text-text-secondary leading-relaxed font-light max-w-sm">
+                  <p className="text-lg text-text-secondary leading-relaxed font-light max-w-sm text-justify">
                     {item.desc}
                   </p>
                 </div>
@@ -227,7 +227,7 @@ export default function Productos() {
 
           {/* Description Intro */}
           <div className="max-w-3xl mx-auto text-center space-y-6">
-            <p className="text-xl text-text-secondary leading-relaxed font-light">
+            <p className="text-xl text-text-secondary leading-relaxed font-light text-justify">
               Desde retail hasta grandes infraestructuras públicas, adaptamos
               nuestra tecnología para responder a las exigencias críticas de
               cada industria.

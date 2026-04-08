@@ -309,7 +309,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 alt="VisualPoint"
                 className="h-24 object-contain"
               />
-              <p className="text-gray-400 text-sm leading-relaxed font-light font-accent tracking-wide">
+              <p className="text-gray-400 text-sm leading-relaxed font-light font-accent tracking-wide text-justify">
                 Líderes en ingeniería visual y soluciones de visualización
                 digital de alto impacto en todo el Perú.
               </p>

@@ -35,6 +35,7 @@
 
   p {
     @apply font-sans;
+    text-align: justify;
   }
 
   /* Custom selection color */
@@ -304,4 +305,174 @@
 
 ::-webkit-scrollbar-thumb:hover {
   background: #002856;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   RESPONSIVE BREAKPOINTS — All devices from the specification
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── Android compacto (≤ 320px) ───────────────────────────────── */
+@media (max-width: 320px) {
+  body {
+    font-size: 13px;
+  }
+  p {
+    text-align: justify;
+    font-size: 0.85rem;
+    line-height: 1.6;
+    word-break: break-word;
+    hyphens: auto;
+  }
+  h1 {
+    font-size: 1.75rem !important;
+  }
+  h2 {
+    font-size: 1.4rem !important;
+  }
+  h3 {
+    font-size: 1.2rem !important;
+  }
+  section {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+  }
+}
+
+/* ── iPhone 13 y 14 (375px) ───────────────────────────────────── */
+@media (min-width: 321px) and (max-width: 375px) {
+  body {
+    font-size: 14px;
+  }
+  p {
+    text-align: justify;
+    font-size: 0.875rem;
+    line-height: 1.65;
+    word-break: break-word;
+    hyphens: auto;
+  }
+  h1 {
+    font-size: 2rem !important;
+  }
+  h2 {
+    font-size: 1.5rem !important;
+  }
+  section {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
+
+/* ── iPhone 14 y 15 Pro / iPhone 16 (393px) ───────────────────── */
+@media (min-width: 376px) and (max-width: 393px) {
+  body {
+    font-size: 14px;
+  }
+  p {
+    text-align: justify;
+    font-size: 0.9rem;
+    line-height: 1.65;
+    word-break: break-word;
+    hyphens: auto;
+  }
+  h1 {
+    font-size: 2.1rem !important;
+  }
+  h2 {
+    font-size: 1.55rem !important;
+  }
+  section {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
+
+/* ── iPhone Air / iPhone 17 / iPhone 16 y 17 Pro (402px) ──────── */
+@media (min-width: 394px) and (max-width: 414px) {
+  body {
+    font-size: 15px;
+  }
+  p {
+    text-align: justify;
+    font-size: 0.925rem;
+    line-height: 1.7;
+    word-break: break-word;
+    hyphens: auto;
+  }
+  h1 {
+    font-size: 2.2rem !important;
+  }
+  h2 {
+    font-size: 1.6rem !important;
+  }
+  section {
+    padding-left: 1.15rem;
+    padding-right: 1.15rem;
+  }
+}
+
+/* ── Android mediano (412px) — cubierto arriba via 394–414px ──── */
+
+/* ── iPhone 16 Plus / iPhone 14 Plus / iPhone 14 y 15 Max (430px) */
+@media (min-width: 415px) and (max-width: 440px) {
+  body {
+    font-size: 15px;
+  }
+  p {
+    text-align: justify;
+    font-size: 0.95rem;
+    line-height: 1.7;
+    word-break: break-word;
+    hyphens: auto;
+  }
+  h1 {
+    font-size: 2.35rem !important;
+  }
+  h2 {
+    font-size: 1.65rem !important;
+  }
+  section {
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+  }
+}
+
+/* ── iPhone 16 y 17 Pro Max (440px+) hasta tablets pequeñas ──── */
+@media (min-width: 441px) and (max-width: 639px) {
+  body {
+    font-size: 15px;
+  }
+  p {
+    text-align: justify;
+    font-size: 1rem;
+    line-height: 1.7;
+    word-break: break-word;
+    hyphens: auto;
+  }
+  h1 {
+    font-size: 2.5rem !important;
+  }
+  h2 {
+    font-size: 1.75rem !important;
+  }
+  section {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+
+/* ── Tablets (sm: 640px–767px) ────────────────────────────────── */
+@media (min-width: 640px) and (max-width: 767px) {
+  p {
+    text-align: justify;
+    font-size: 1rem;
+    line-height: 1.75;
+  }
+}
+
+/* ── Tablets / Desktop (md: 768px+) ──────────────────────────── */
+@media (min-width: 768px) {
+  p {
+    text-align: justify;
+    line-height: 1.75;
+  }
 }
