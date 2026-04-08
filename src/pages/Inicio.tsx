@@ -234,7 +234,7 @@ export default function Inicio() {
             trigger: heroRef.current,
             start: "top top",
             end: "+=3000",
-            scrub: 0.5,
+            scrub: 1.5,
             pin: true,
             anticipatePin: 1,
           },
@@ -242,38 +242,38 @@ export default function Inicio() {
 
         tl.to(
           heroTextRef.current,
-          { opacity: 0, y: -100, duration: 1, ease: "none" },
+          { opacity: 0, y: -80, duration: 1.5, ease: "power1.inOut" },
           0,
         );
         tl.to(
           videoBgRef.current,
-          { y: -150, opacity: 0, duration: 1, ease: "none" },
+          { y: -100, opacity: 0, duration: 1.5, ease: "power1.inOut" },
           0,
         );
-        tl.to(".scroll-indicator", { opacity: 0, duration: 0.3 }, 0);
-        tl.to(galleryRef.current, { opacity: 1, duration: 0.5 }, 1);
+        tl.to(".scroll-indicator", { opacity: 0, duration: 0.5 }, 0);
+        tl.to(galleryRef.current, { opacity: 1, duration: 0.8 }, 1.2);
 
-        gsap.set(col1Ref.current, { y: "100vh", opacity: 1 });
-        gsap.set(col4Ref.current, { y: "100vh", opacity: 1 });
-        gsap.set(col2Ref.current, { y: "60vh", opacity: 1 });
-        gsap.set(col3Ref.current, { y: "60vh", opacity: 1 });
+        gsap.set(col1Ref.current, { y: "80vh", opacity: 1 });
+        gsap.set(col4Ref.current, { y: "80vh", opacity: 1 });
+        gsap.set(col2Ref.current, { y: "50vh", opacity: 1 });
+        gsap.set(col3Ref.current, { y: "50vh", opacity: 1 });
 
-        tl.to(col1Ref.current, { y: "0vh", duration: 2, ease: "none" }, 1);
-        tl.to(col4Ref.current, { y: "0vh", duration: 2, ease: "none" }, 1);
-        tl.to(col2Ref.current, { y: "0vh", duration: 1.5, ease: "none" }, 1.2);
-        tl.to(col3Ref.current, { y: "0vh", duration: 1.5, ease: "none" }, 1.2);
+        tl.to(col1Ref.current, { y: "0vh", duration: 2.5, ease: "power1.out" }, 1.2);
+        tl.to(col4Ref.current, { y: "0vh", duration: 2.5, ease: "power1.out" }, 1.2);
+        tl.to(col2Ref.current, { y: "0vh", duration: 2, ease: "power1.out" }, 1.4);
+        tl.to(col3Ref.current, { y: "0vh", duration: 2, ease: "power1.out" }, 1.4);
 
         tl.fromTo(
           galleryCenterRef.current,
           { opacity: 0, y: 30 },
           { opacity: 1, y: 0, duration: 1, ease: "none" },
-          2,
+          2.5,
         );
 
-        tl.to(col1Ref.current, { y: "-80vh", duration: 5, ease: "none" }, 2.5);
-        tl.to(col4Ref.current, { y: "-80vh", duration: 5, ease: "none" }, 2.5);
-        tl.to(col2Ref.current, { y: "-50vh", duration: 5, ease: "none" }, 2.5);
-        tl.to(col3Ref.current, { y: "-50vh", duration: 5, ease: "none" }, 2.5);
+        tl.to(col1Ref.current, { y: "-80vh", duration: 5, ease: "none" }, 3);
+        tl.to(col4Ref.current, { y: "-80vh", duration: 5, ease: "none" }, 3);
+        tl.to(col2Ref.current, { y: "-50vh", duration: 5, ease: "none" }, 3);
+        tl.to(col3Ref.current, { y: "-50vh", duration: 5, ease: "none" }, 3);
 
         tl.to(
           [galleryCenterRef.current, galleryRef.current],

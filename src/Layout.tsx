@@ -137,16 +137,44 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         />
       </div>
 
-      {/* Page Transition Overlay */}
+      {/* Page Transition Overlay — Modern Gradient + Geometric Lines */}
       <div
         ref={overlayRef}
-        className="fixed inset-0 bg-[#1a3a5c] z-[9999] pointer-events-none transform -translate-x-full flex items-center justify-center"
+        className="fixed inset-0 z-[9999] pointer-events-none transform -translate-x-full flex items-center justify-center overflow-hidden"
+        style={{
+          background: "linear-gradient(135deg, #00a3dd 0%, #005f8a 40%, #002856 100%)",
+        }}
       >
-        <img
-          src="/vp-logo-icono.png"
-          alt="VP"
-          className="w-40 h-auto opacity-60 animate-pulse object-contain"
-        />
+        {/* Animated geometric lines */}
+        <div className="absolute inset-0 opacity-[0.08]">
+          <div className="absolute top-[15%] left-0 w-full h-px bg-white" />
+          <div className="absolute top-[30%] left-0 w-full h-px bg-white" />
+          <div className="absolute top-[50%] left-0 w-full h-px bg-white" />
+          <div className="absolute top-[70%] left-0 w-full h-px bg-white" />
+          <div className="absolute top-[85%] left-0 w-full h-px bg-white" />
+          <div className="absolute top-0 left-[20%] w-px h-full bg-white" />
+          <div className="absolute top-0 left-[40%] w-px h-full bg-white" />
+          <div className="absolute top-0 left-[60%] w-px h-full bg-white" />
+          <div className="absolute top-0 left-[80%] w-px h-full bg-white" />
+        </div>
+        {/* Glowing dot accents */}
+        <div className="absolute top-[15%] left-[20%] w-2 h-2 rounded-full bg-brand-celeste opacity-30 blur-[2px]" />
+        <div className="absolute top-[50%] left-[60%] w-3 h-3 rounded-full bg-white opacity-20 blur-[3px]" />
+        <div className="absolute top-[70%] left-[40%] w-2 h-2 rounded-full bg-brand-celeste opacity-25 blur-[2px]" />
+        {/* Logo + label */}
+        <div className="flex flex-col items-center gap-6 z-10">
+          <img
+            src="/vp-logo-icono.png"
+            alt="VP"
+            className="w-28 md:w-36 h-auto object-contain drop-shadow-[0_0_30px_rgba(0,163,221,0.4)] transition-transform duration-700"
+            style={{ animation: "transitionLogo 1.2s ease-in-out infinite alternate" }}
+          />
+          <span className="text-white/40 text-[9px] uppercase tracking-[0.4em] font-black font-accent">
+            Visual Point
+          </span>
+        </div>
+        {/* Bottom gradient fade */}
+        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-[#002856]/60 to-transparent" />
       </div>
 
       {/* Navbar */}

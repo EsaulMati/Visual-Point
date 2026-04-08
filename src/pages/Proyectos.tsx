@@ -123,20 +123,24 @@ function DualInfiniteGallery({
       const el1 = row1Ref.current;
       const el2 = row2Ref.current;
 
-      // Move row1 left, row2 right
+      // Move row1 right, row2 left
       el1.scrollLeft += 0.5;
       el2.scrollLeft -= 0.5;
 
-      // Infinite loop for row1 (2x duplication)
-      const oneHalf1 = el1.scrollWidth / 2;
-      if (el1.scrollLeft >= oneHalf1) {
-        el1.scrollLeft = 0;
+      // Infinite loop for row1 (3x duplication — use oneThird)
+      const oneThird1 = el1.scrollWidth / 3;
+      if (el1.scrollLeft >= oneThird1 * 2) {
+        el1.scrollLeft -= oneThird1;
+      } else if (el1.scrollLeft <= 0) {
+        el1.scrollLeft += oneThird1;
       }
 
-      // Infinite loop for row2 (2x duplication)
-      const oneHalf2 = el2.scrollWidth / 2;
+      // Infinite loop for row2 (3x duplication — use oneThird)
+      const oneThird2 = el2.scrollWidth / 3;
       if (el2.scrollLeft <= 0) {
-        el2.scrollLeft = oneHalf2;
+        el2.scrollLeft += oneThird2;
+      } else if (el2.scrollLeft >= oneThird2 * 2) {
+        el2.scrollLeft -= oneThird2;
       }
 
       autoScrollRef.current = requestAnimationFrame(scroll);
@@ -167,6 +171,16 @@ function DualInfiniteGallery({
     }, 2500);
   }, [startAutoScroll, stopAutoScroll]);
 
+  // Wrap helper: keeps scrollLeft within the middle third (infinite feel)
+  const wrapScroll = useCallback((el: HTMLDivElement) => {
+    const oneThird = el.scrollWidth / 3;
+    if (el.scrollLeft >= oneThird * 2) {
+      el.scrollLeft -= oneThird;
+    } else if (el.scrollLeft <= 0) {
+      el.scrollLeft += oneThird;
+    }
+  }, []);
+
   // Sync row1 scroll to row2 (opposite direction)
   const handleRow1Scroll = useCallback(() => {
     if (isUpdatingRef.current || !row1Ref.current || !row2Ref.current) return;
@@ -174,22 +188,19 @@ function DualInfiniteGallery({
 
     const el1 = row1Ref.current;
     const el2 = row2Ref.current;
-    const oneHalf1 = el1.scrollWidth / 2;
-    const oneHalf2 = el2.scrollWidth / 2;
 
-    // Infinite loop check
-    if (el1.scrollLeft >= oneHalf1 - 5) {
-      el1.scrollLeft = 0;
-    }
+    wrapScroll(el1);
 
     // Sync row2 opposite
-    const ratio = el1.scrollLeft / oneHalf1;
-    el2.scrollLeft = oneHalf2 * (1 - ratio);
+    const oneThird1 = el1.scrollWidth / 3;
+    const oneThird2 = el2.scrollWidth / 3;
+    const ratio = (el1.scrollLeft % oneThird1) / oneThird1;
+    el2.scrollLeft = oneThird2 + oneThird2 * (1 - ratio);
 
     requestAnimationFrame(() => {
       isUpdatingRef.current = false;
     });
-  }, []);
+  }, [wrapScroll]);
 
   // Sync row2 scroll to row1 (opposite direction)
   const handleRow2Scroll = useCallback(() => {
@@ -198,32 +209,30 @@ function DualInfiniteGallery({
 
     const el1 = row1Ref.current;
     const el2 = row2Ref.current;
-    const oneHalf1 = el1.scrollWidth / 2;
-    const oneHalf2 = el2.scrollWidth / 2;
 
-    // Infinite loop check
-    if (el2.scrollLeft <= 5) {
-      el2.scrollLeft = oneHalf2;
-    }
+    wrapScroll(el2);
 
     // Sync row1 opposite
-    const ratio = el2.scrollLeft / oneHalf2;
-    el1.scrollLeft = oneHalf1 * (1 - ratio);
+    const oneThird1 = el1.scrollWidth / 3;
+    const oneThird2 = el2.scrollWidth / 3;
+    const ratio = (el2.scrollLeft % oneThird2) / oneThird2;
+    el1.scrollLeft = oneThird1 + oneThird1 * (1 - ratio);
 
     requestAnimationFrame(() => {
       isUpdatingRef.current = false;
     });
-  }, []);
+  }, [wrapScroll]);
 
   useEffect(() => {
     const el1 = row1Ref.current;
     const el2 = row2Ref.current;
     if (!el1 || !el2) return;
 
-    // Start positions (el1 at start, el2 at end for opposite motion)
-    el1.scrollLeft = 0;
-    const oneHalf2 = el2.scrollWidth / 2;
-    el2.scrollLeft = oneHalf2;
+    // Start positions: both start at their middle third for infinite wrap room
+    const oneThird1 = el1.scrollWidth / 3;
+    const oneThird2 = el2.scrollWidth / 3;
+    el1.scrollLeft = oneThird1;
+    el2.scrollLeft = oneThird2 * 2;
 
     // Start auto-scroll
     const startDelay = setTimeout(() => startAutoScroll(), 100);
@@ -267,9 +276,9 @@ function DualInfiniteGallery({
     handleRow2Scroll,
   ]);
 
-  // Duplicate 2x instead of 3x for better performance
-  const doubleRow1 = [...row1Images, ...row1Images];
-  const doubleRow2 = [...row2Images, ...row2Images];
+  // Triplicate for seamless infinite scrolling in both directions
+  const tripleRow1 = [...row1Images, ...row1Images, ...row1Images];
+  const tripleRow2 = [...row2Images, ...row2Images, ...row2Images];
 
   return (
     <div className="space-y-3">
@@ -279,7 +288,7 @@ function DualInfiniteGallery({
           ref={row1Ref}
           className="flex gap-4 overflow-x-auto scrollbar-hide"
         >
-          {doubleRow1.map((item, idx) => (
+          {tripleRow1.map((item, idx) => (
             <div
               key={`row1-${idx}`}
               className="gallery-img relative overflow-hidden rounded-lg bg-gray-100 group cursor-pointer flex-shrink-0 w-[220px] sm:w-56 md:w-64 lg:w-72 aspect-[4/3]"
@@ -299,7 +308,7 @@ function DualInfiniteGallery({
           ref={row2Ref}
           className="flex gap-4 overflow-x-auto scrollbar-hide"
         >
-          {doubleRow2.map((item, idx) => (
+          {tripleRow2.map((item, idx) => (
             <div
               key={`row2-${idx}`}
               className="gallery-img relative overflow-hidden rounded-lg bg-gray-100 group cursor-pointer flex-shrink-0 w-[220px] sm:w-56 md:w-64 lg:w-72 aspect-[4/3]"
