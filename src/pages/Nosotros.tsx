@@ -85,19 +85,19 @@ function HexagonItem({ benefit, index }: HexagonProps) {
           <Icon size={36} strokeWidth={1.5} />
         </div>
 
-        {/* Título y subtítulo */}
-        <div className="space-y-1 mb-3">
-          <h4 className="font-display font-black text-lg sm:text-xl leading-tight text-white md:text-brand-dark md:group-hover:text-white">
+        {/* Título y subtitulo */}
+        <div className="space-y-1 mb-3 w-full text-center flex flex-col items-center">
+          <h4 className="font-display font-black text-lg sm:text-xl leading-tight text-white md:text-brand-dark md:group-hover:text-white text-center">
             {benefit.title}
           </h4>
-          <p className="text-[10px] uppercase tracking-wider font-bold text-white/80 md:text-brand-celeste md:group-hover:text-white/80">
+          <p className="text-[10px] uppercase tracking-wider font-bold text-white/80 md:text-brand-celeste md:group-hover:text-white/80 text-center">
             {benefit.subtitle}
           </p>
         </div>
 
-        {/* Descripción - siempre visible en móvil, hover en desktop */}
-        <div className="flex-1 flex items-center px-2 md:opacity-0 md:group-hover:opacity-100 transition-all duration-400">
-          <p className="text-xs leading-relaxed font-light text-white/90 line-clamp-4 text-justify">
+        {/* Descripción - siempre visible en móvil, se muestra al pasar el mouse en desktop */}
+        <div className="flex-1 flex items-center px-2 md:opacity-0 md:group-hover:opacity-100 transition-all duration-400 w-full justify-center">
+          <p className="text-xs leading-relaxed font-light text-white/90 line-clamp-4 text-center">
             {benefit.desc}
           </p>
         </div>
@@ -149,7 +149,7 @@ export default function Nosotros() {
       ref={containerRef}
       className="w-full bg-[#FCFCFC] overflow-hidden pb-20 md:pb-40 font-sans"
     >
-      {/* HERO SECTION - SPLIT PROFESIONAL (ALINEADA IZQUIERDA) */}
+      {/* SECCIÓN HERO - ALINEACIÓN IZQUIERDA */}
       <section className="relative pt-24 pb-24 md:pt-32 md:pb-32 px-6 md:px-20 text-left led-grid">
         <div className="absolute top-0 left-0 right-0 h-[50vh] bg-gradient-to-br from-brand-celeste/5 to-transparent -z-10" />
 
@@ -191,10 +191,10 @@ export default function Nosotros() {
         </div>
       </section>
 
-      {/* TECH DIVIDER */}
+      {/* DIVISOR TÉCNICO */}
       <div className="tech-divider" />
 
-      {/* HEXAGON GRID SECTION */}
+      {/* SECCIÓN GRID HEXAGONAL */}
       <section className="py-24 bg-white overflow-hidden text-left">
         <div className="max-w-screen-2xl mx-auto px-6 md:px-20">
           <div className="mb-24 space-y-6">
@@ -209,15 +209,10 @@ export default function Nosotros() {
             <div className="w-12 h-1 bg-brand-celeste" />
           </div>
 
-          {/* Optimized Honeycomb Grid */}
-          <div className="hex-container flex flex-wrap justify-center gap-4 md:gap-6 lg:gap-8">
-            {BENEFITS.slice(0, 4).map((b, i) => (
+          {/* Grid Hexagonal Optimizado */}
+          <div className="hex-container flex flex-wrap justify-center gap-8 md:gap-12">
+            {BENEFITS.map((b, i) => (
               <HexagonItem key={i} benefit={b} index={i} />
-            ))}
-          </div>
-          <div className="flex flex-wrap justify-center gap-4 md:gap-6 lg:gap-8 mt-4 md:-mt-8">
-            {BENEFITS.slice(4).map((b, i) => (
-              <HexagonItem key={i + 4} benefit={b} index={i + 4} />
             ))}
           </div>
         </div>
@@ -226,7 +221,7 @@ export default function Nosotros() {
       {/* TECH DIVIDER */}
       <div className="tech-divider" />
 
-      {/* VALORES SECTION - ALINEADA IZQUIERDA */}
+      {/* SECCIÓN VALORES - ALINEACIÓN IZQUIERDA */}
       <section className="py-32 px-6 md:px-20 bg-[#FCFCFC]">
         <div className="max-w-7xl mx-auto mb-20 text-left">
           <h3 className="text-brand-celeste font-bold text-[10px] tracking-widest uppercase mb-4">

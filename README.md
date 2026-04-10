@@ -1,20 +1,17 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# Visual Point Landing Page
 
-# Run and deploy your AI Studio app
+Welcome to the Visual Point corporate landing page project.
 
-This contains everything you need to run your app locally.
-
-View your app in AI Studio: https://ai.studio/apps/7c507f0f-c6d5-4ad8-8670-2b4d94fbcf1d
+## Overview
+This is a modern, high-performance React application built with Vite, Tailwind CSS, and GSAP for animations. It features smooth scrolling, infinite carousels, and responsive layouts tailored for specialized displays and LED products.
 
 ## Run Locally
 
-**Prerequisites:**  Node.js
-
+**Prerequisites:** Node.js 18+
 
 1. Install dependencies:
    `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
+2. Run the development server:
    `npm run dev`
+3. Build for production:
+   `npm run build`

@@ -13,7 +13,7 @@ import {
 } from "lucide-react";
 
 const COUNTRY_DATA = [
-  // América
+  // North & South America
   { code: "+51", name: "Perú", flag: "🇵🇪", len: 9, start: "9" },
   { code: "+1", name: "USA/Canadá", flag: "🇺🇸", len: 10 },
   { code: "+52", name: "México", flag: "🇲🇽", len: 10, start: ["5", "3"] },
@@ -58,7 +58,7 @@ const COUNTRY_DATA = [
   },
   { code: "+1-809", name: "Rep. Dominicana", flag: "🇩🇴", len: 10, start: "8" },
 
-  // Europa
+  // Europe
   { code: "+34", name: "España", flag: "🇪🇸", len: 9, start: ["6", "7"] },
   { code: "+33", name: "Francia", flag: "🇫🇷", len: 9, start: ["6", "7"] },
   { code: "+39", name: "Italia", flag: "🇮🇹", len: 10, start: "3" },
@@ -71,7 +71,7 @@ const COUNTRY_DATA = [
   { code: "+43", name: "Austria", flag: "🇦🇹", len: 10 },
   { code: "+46", name: "Suecia", flag: "🇸🇪", len: 9, start: "7" },
 
-  // Asia & Oceanía
+  // Asia & Oceania
   { code: "+81", name: "Japón", flag: "🇯🇵", len: 10, start: ["7", "8", "9"] },
   { code: "+86", name: "China", flag: "🇨🇳", len: 11, start: "1" },
   { code: "+82", name: "Corea del Sur", flag: "🇰🇷", len: 10, start: "1" },
@@ -234,16 +234,16 @@ export default function Contacto() {
       setIsSubmitting(true);
 
       try {
-        // Enviar datos usando fetch a la URL de Google Apps Script
+        // Send data using fetch to Google Apps Script URL
         const url =
           "https://script.google.com/macros/s/AKfycby2OMympdJfWpuMxnhB96z5ros2oa9IWLSYLLuUcFuR9S8yinkUVHJrbk9rj-FtVfH5zQ/exec";
 
-        // Creamos un objeto de formulario estándar
+        // Create standard form data object
         const postData = new URLSearchParams();
         postData.append("nombre", formData.nombre);
         postData.append("empresa", formData.empresa);
         postData.append("email", formData.email);
-        // Agregamos una comilla simple al inicio para que el Excel lo lea como Texto y no como Fórmula matemática (evita el #ERROR! por el símbolo +)
+        // Prefix with a single quote so Excel reads it as text and avoids the #ERROR! mathematical formula issue caused by "+"
         postData.append(
           "telefono",
           `\'${formData.country.code} ${formData.telefono}`,
@@ -259,7 +259,7 @@ export default function Contacto() {
 
         setIsSubmitting(false);
         setIsSuccess(true);
-        // Reseteo limpio
+        // Clean reset
         setFormData({
           nombre: "",
           empresa: "",

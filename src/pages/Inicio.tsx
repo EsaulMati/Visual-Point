@@ -7,7 +7,7 @@ import { Helmet } from "react-helmet-async";
 
 gsap.registerPlugin(ScrollTrigger);
 
-// ── Content Configuration ────────────────────────────────────────
+// ── Configuración de Contenido ─────────────────────────────────────
 const HOME_DATA = {
   hero: {
     title: "Diseñando el",
@@ -45,7 +45,7 @@ const BRANDS = [
   },
 ];
 
-// ── 4 columns × 5 images each ──────────────────────────────────
+// ── 4 columnas × 5 imágenes cada una ───────────────────────────
 const COL1 = [
   "/Imagen15.png",
   "/Imagen3.png",
@@ -124,7 +124,7 @@ function FullscreenSlider({ images }: { images: string[] }) {
         </h3>
       </div>
 
-      {/* Slide indicators */}
+      {/* Indicadores de slide */}
       <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-3 z-30">
         {images.map((_, i) => (
           <button
@@ -226,7 +226,7 @@ export default function Inicio() {
         ease: "sine.inOut",
       });
 
-      // Gallery pin animation only on desktop (avoids excessive scroll on mobile)
+      // Animación pin de galería solo en desktop (evita exceso de scroll en móvil)
       const mm = gsap.matchMedia();
       mm.add("(min-width: 768px)", () => {
         const tl = gsap.timeline({
@@ -234,51 +234,48 @@ export default function Inicio() {
             trigger: heroRef.current,
             start: "top top",
             end: "+=3000",
-            scrub: 1.5,
+            scrub: 1.2,
             pin: true,
-            anticipatePin: 1,
           },
         });
 
+        // 1. Ocultar el texto/video inicial suavemente
         tl.to(
           heroTextRef.current,
-          { opacity: 0, y: -80, duration: 1.5, ease: "power1.inOut" },
+          { opacity: 0, y: -80, duration: 1, ease: "power2.inOut" },
           0,
         );
         tl.to(
           videoBgRef.current,
-          { y: -100, opacity: 0, duration: 1.5, ease: "power1.inOut" },
+          { y: -100, opacity: 0, duration: 1, ease: "power2.inOut" },
           0,
         );
         tl.to(".scroll-indicator", { opacity: 0, duration: 0.5 }, 0);
-        tl.to(galleryRef.current, { opacity: 1, duration: 0.8 }, 1.2);
 
-        gsap.set(col1Ref.current, { y: "80vh", opacity: 1 });
-        gsap.set(col4Ref.current, { y: "80vh", opacity: 1 });
-        gsap.set(col2Ref.current, { y: "50vh", opacity: 1 });
-        gsap.set(col3Ref.current, { y: "50vh", opacity: 1 });
+        // 2. Mostrar el contenedor de la galería suavemente
+        tl.to(galleryRef.current, { opacity: 1, duration: 1 }, 0.5);
 
-        tl.to(col1Ref.current, { y: "0vh", duration: 2.5, ease: "power1.out" }, 1.2);
-        tl.to(col4Ref.current, { y: "0vh", duration: 2.5, ease: "power1.out" }, 1.2);
-        tl.to(col2Ref.current, { y: "0vh", duration: 2, ease: "power1.out" }, 1.4);
-        tl.to(col3Ref.current, { y: "0vh", duration: 2, ease: "power1.out" }, 1.4);
+        // 3. Mover columnas hacia arriba SIN superponer animaciones!
+        // Iniciarlas más abajo y moverlas fluidamente hacia arriba
+        tl.fromTo(col1Ref.current, { y: "80vh", opacity: 1 }, { y: "-60vh", duration: 6, ease: "none" }, 0.5);
+        tl.fromTo(col4Ref.current, { y: "80vh", opacity: 1 }, { y: "-60vh", duration: 6, ease: "none" }, 0.5);
+        
+        tl.fromTo(col2Ref.current, { y: "120vh", opacity: 1 }, { y: "-30vh", duration: 6, ease: "none" }, 0.5);
+        tl.fromTo(col3Ref.current, { y: "120vh", opacity: 1 }, { y: "-30vh", duration: 6, ease: "none" }, 0.5);
 
+        // 4. Aparecer texto central mientras las columnas pasan
         tl.fromTo(
           galleryCenterRef.current,
-          { opacity: 0, y: 30 },
-          { opacity: 1, y: 0, duration: 1, ease: "none" },
-          2.5,
+          { opacity: 0, scale: 0.9, y: 30 },
+          { opacity: 1, scale: 1, y: 0, duration: 1.5, ease: "power2.out" },
+          2,
         );
 
-        tl.to(col1Ref.current, { y: "-80vh", duration: 5, ease: "none" }, 3);
-        tl.to(col4Ref.current, { y: "-80vh", duration: 5, ease: "none" }, 3);
-        tl.to(col2Ref.current, { y: "-50vh", duration: 5, ease: "none" }, 3);
-        tl.to(col3Ref.current, { y: "-50vh", duration: 5, ease: "none" }, 3);
-
+        // 5. Ocultar todo al final
         tl.to(
           [galleryCenterRef.current, galleryRef.current],
-          { opacity: 0, duration: 1.5 },
-          8,
+          { opacity: 0, duration: 1.5, ease: "power2.inOut" },
+          5.5,
         );
       });
 
@@ -291,7 +288,7 @@ export default function Inicio() {
         ease: "power3.out",
       });
 
-      // Brand logos animation removed - they appear instantly now
+      // Animación de logos eliminada - ahora aparecen instantáneamente
 
       ScrollTrigger.create({
         trigger: statsSectionRef.current,
@@ -317,7 +314,7 @@ export default function Inicio() {
         />
       </Helmet>
 
-      {/* HERO */}
+      {/* SECCIÓN HERO */}
       <section
         ref={heroRef}
         className="relative h-screen flex items-center justify-center overflow-hidden bg-white"
@@ -335,7 +332,7 @@ export default function Inicio() {
           >
             <source src={HOME_DATA.hero.videoUrl} type="video/mp4" />
           </video>
-          {/* Precise lighting gradient */}
+          {/* Degradado de iluminación preciso */}
           <div className="absolute inset-0 bg-gradient-to-b from-white/20 via-transparent to-white" />
         </div>
 
