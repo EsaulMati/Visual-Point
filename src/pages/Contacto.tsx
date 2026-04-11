@@ -13,7 +13,7 @@ import {
 } from "lucide-react";
 
 const COUNTRY_DATA = [
-  // North & South America
+  // América del Norte y Sur
   { code: "+51", name: "Perú", flag: "🇵🇪", len: 9, start: "9" },
   { code: "+1", name: "USA/Canadá", flag: "🇺🇸", len: 10 },
   { code: "+52", name: "México", flag: "🇲🇽", len: 10, start: ["5", "3"] },
@@ -58,7 +58,7 @@ const COUNTRY_DATA = [
   },
   { code: "+1-809", name: "Rep. Dominicana", flag: "🇩🇴", len: 10, start: "8" },
 
-  // Europe
+  // Europa
   { code: "+34", name: "España", flag: "🇪🇸", len: 9, start: ["6", "7"] },
   { code: "+33", name: "Francia", flag: "🇫🇷", len: 9, start: ["6", "7"] },
   { code: "+39", name: "Italia", flag: "🇮🇹", len: 10, start: "3" },
@@ -71,7 +71,7 @@ const COUNTRY_DATA = [
   { code: "+43", name: "Austria", flag: "🇦🇹", len: 10 },
   { code: "+46", name: "Suecia", flag: "🇸🇪", len: 9, start: "7" },
 
-  // Asia & Oceania
+  // Asia y Oceanía
   { code: "+81", name: "Japón", flag: "🇯🇵", len: 10, start: ["7", "8", "9"] },
   { code: "+86", name: "China", flag: "🇨🇳", len: 11, start: "1" },
   { code: "+82", name: "Corea del Sur", flag: "🇰🇷", len: 10, start: "1" },
@@ -109,17 +109,21 @@ export default function Contacto() {
   const containerRef = useRef<HTMLDivElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  // Form State
+  // Estado del formulario
   const [formData, setFormData] = useState({
     nombre: "",
     empresa: "",
-    country: COUNTRY_DATA[0], // Selected country object
+    country: COUNTRY_DATA[0], // País seleccionado
     telefono: "",
     email: "",
     asunto: "",
     mensaje: "",
     privacy: false,
+    website: "", // Campo honeypot - los bots lo llenan, los humanos no lo ven
   });
+
+  // Anti-bot: Registrar cuándo se cargó el formulario
+  const [formLoadTime] = useState(() => Date.now());
 
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [touched, setTouched] = useState<Record<string, boolean>>({});
@@ -128,7 +132,7 @@ export default function Contacto() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
 
-  // Close dropdown on outside click
+  // Cerrar dropdown al hacer clic afuera
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (
@@ -164,14 +168,14 @@ export default function Contacto() {
 
     if (name === "telefono") {
       const country = formData.country;
-      const cleanValue = value.replace(/\D/g, ""); // Numbers only
+      const cleanValue = value.replace(/\D/g, ""); // Solo números
 
       if (!cleanValue) {
         error = "El teléfono es requerido";
       } else if (cleanValue.length !== country.len) {
         error = "Número inválido";
       } else if (country.start) {
-        // Starts with logic (string or array)
+        // Lógica de inicio (string o array)
         const starts = Array.isArray(country.start)
           ? country.start
           : [country.start];
@@ -204,7 +208,7 @@ export default function Contacto() {
 
     setFormData((prev) => ({ ...prev, [name]: val }));
 
-    // Immediate validation if already touched
+    // Validación inmediata si ya fue tocado
     if (touched[name]) {
       const error = validateField(name, val);
       setErrors((prev) => ({ ...prev, [name]: error }));
@@ -214,14 +218,14 @@ export default function Contacto() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Mark all as touched
+    // Marcar todos los campos como tocados
     const allTouched = Object.keys(formData).reduce(
       (acc, k) => ({ ...acc, [k]: true }),
       {},
     );
     setTouched(allTouched);
 
-    // Validate all
+    // Validar todos los campos
     const newErrors: Record<string, string> = {};
     Object.keys(formData).forEach((k) => {
       const err = validateField(k, (formData as any)[k]);
@@ -231,19 +235,28 @@ export default function Contacto() {
     setErrors(newErrors);
 
     if (Object.keys(newErrors).length === 0) {
+      // Anti-bot: Verificar honeypot y tiempo
+      const timeSpent = (Date.now() - formLoadTime) / 1000; // segundos
+      if (formData.website || timeSpent < 3) {
+        // Bot detectado - ignorar silenciosamente
+        setIsSuccess(true);
+        setTimeout(() => setIsSuccess(false), 5000);
+        return;
+      }
+
       setIsSubmitting(true);
 
       try {
-        // Send data using fetch to Google Apps Script URL
+        // Enviar datos usando fetch a la URL de Google Apps Script
         const url =
-          "https://script.google.com/macros/s/AKfycby2OMympdJfWpuMxnhB96z5ros2oa9IWLSYLLuUcFuR9S8yinkUVHJrbk9rj-FtVfH5zQ/exec";
+          "https://script.google.com/macros/s/AKfycbzqAe2IVa13KyIy_37DRuD9sJ6YznWFIDqG8sw8SansFemGIiBVDw4RiQ8PfgkDrcWYbQ/exec";
 
-        // Create standard form data object
+        // Crear objeto de datos del formulario estándar
         const postData = new URLSearchParams();
         postData.append("nombre", formData.nombre);
         postData.append("empresa", formData.empresa);
         postData.append("email", formData.email);
-        // Prefix with a single quote so Excel reads it as text and avoids the #ERROR! mathematical formula issue caused by "+"
+        // Prefijo con comilla simple para que Excel lo lea como texto y evite el error #ERROR! de fórmula matemática causado por "+"
         postData.append(
           "telefono",
           `\'${formData.country.code} ${formData.telefono}`,
@@ -259,7 +272,7 @@ export default function Contacto() {
 
         setIsSubmitting(false);
         setIsSuccess(true);
-        // Clean reset
+        // Reinicio limpio
         setFormData({
           nombre: "",
           empresa: "",
@@ -269,6 +282,7 @@ export default function Contacto() {
           asunto: "",
           mensaje: "",
           privacy: false,
+          website: "",
         });
         setTouched({});
         setTimeout(() => setIsSuccess(false), 5000);
@@ -287,7 +301,7 @@ export default function Contacto() {
       ref={containerRef}
       className="w-full bg-[#FCFCFC] overflow-hidden pb-12 md:pb-20 font-sans"
     >
-      {/* HERO SECTION */}
+      {/* SECCIÓN HERO */}
       <section className="relative pt-24 pb-16 md:pt-32 md:pb-20 px-6 md:px-20 text-left led-grid">
         <div className="absolute top-0 left-0 right-0 h-[60vh] bg-gradient-to-br from-brand-celeste/10 to-transparent -z-10" />
         <div className="max-w-7xl mx-auto space-y-10">
@@ -310,7 +324,7 @@ export default function Contacto() {
         </div>
       </section>
 
-      {/* FORM MASTER SECTION */}
+      {/* SECCIÓN PRINCIPAL DEL FORMULARIO */}
       <section className="px-6 md:px-20 pb-16">
         <div className="max-w-7xl mx-auto">
           <div className="bg-white rounded-[64px] border border-gray-100 shadow-[0_50px_120px_-30px_rgba(0,40,86,0.12)] p-8 md:p-20 relative">
@@ -344,9 +358,9 @@ export default function Contacto() {
                 onSubmit={handleSubmit}
                 className="grid grid-cols-1 lg:grid-cols-2 gap-x-16 gap-y-12"
               >
-                {/* COL LEFT: Info Personal */}
+                {/* COLUMNA IZQUIERDA: Información Personal */}
                 <div className="space-y-12">
-                  {/* Field: Nombre */}
+                  {/* Campo: Nombre */}
                   <div className="space-y-4">
                     <label
                       className={`text-[10px] uppercase font-black tracking-[0.3em] transition-colors font-accent ${errors.nombre && touched.nombre ? "text-red-500" : "text-brand-dark/30"}`}
@@ -376,7 +390,7 @@ export default function Contacto() {
                     )}
                   </div>
 
-                  {/* Field: Empresa */}
+                  {/* Campo: Empresa */}
                   <div className="space-y-4">
                     <label
                       className={`text-[10px] uppercase font-black tracking-[0.3em] transition-colors font-accent ${errors.empresa && touched.empresa ? "text-red-500" : "text-brand-dark/30"}`}
@@ -406,7 +420,7 @@ export default function Contacto() {
                     )}
                   </div>
 
-                  {/* Field: Email */}
+                  {/* Campo: Email */}
                   <div className="space-y-4">
                     <label
                       className={`text-[10px] uppercase font-black tracking-[0.3em] transition-colors font-accent ${errors.email && touched.email ? "text-red-500" : "text-brand-dark/30"}`}
@@ -437,9 +451,9 @@ export default function Contacto() {
                   </div>
                 </div>
 
-                {/* COL RIGHT: Technical Details */}
+                {/* COLUMNA DERECHA: Detalles Técnicos */}
                 <div className="space-y-12">
-                  {/* Field: Teléfono con Selector Pro */}
+                  {/* Campo: Teléfono con Selector Pro */}
                   <div className="space-y-4">
                     <label
                       className={`text-[10px] uppercase font-black tracking-[0.3em] transition-colors font-accent ${errors.telefono && touched.telefono ? "text-red-500" : "text-brand-dark/30"}`}
@@ -449,7 +463,7 @@ export default function Contacto() {
                     <div
                       className={`flex gap-3 border-b-2 transition-all p-1 items-center relative ${errors.telefono && touched.telefono ? "border-red-500 bg-red-50 shadow-[0_4px_20px_-10px_rgba(239,68,68,0.3)]" : "border-gray-100 group focus-within:border-brand-celeste"}`}
                     >
-                      {/* CUSTOM SELECT DROPDOWN */}
+                      {/* SELECTOR DESPLEGABLE PERSONALIZADO */}
                       <div className="relative shrink-0" ref={dropdownRef}>
                         <button
                           type="button"
@@ -528,7 +542,7 @@ export default function Contacto() {
                         )}
                       </div>
 
-                      {/* Phone Input: Integers only restricted by validateField logic */}
+                      {/* Input Teléfono: Solo enteros restringidos por lógica de validateField */}
                       <input
                         type="tel"
                         name="telefono"
@@ -559,7 +573,7 @@ export default function Contacto() {
                     )}
                   </div>
 
-                  {/* Field: Asunto */}
+                  {/* Campo: Asunto */}
                   <div className="space-y-4">
                     <label
                       className={`text-[10px] uppercase font-black tracking-[0.3em] transition-colors font-accent ${errors.asunto && touched.asunto ? "text-red-500" : "text-brand-dark/30"}`}
@@ -582,7 +596,7 @@ export default function Contacto() {
                     )}
                   </div>
 
-                  {/* Field: Mensaje */}
+                  {/* Campo: Mensaje */}
                   <div className="space-y-4">
                     <label
                       className={`text-[10px] uppercase font-black tracking-[0.3em] transition-colors font-accent ${errors.mensaje && touched.mensaje ? "text-red-500" : "text-brand-dark/30"}`}
@@ -606,7 +620,19 @@ export default function Contacto() {
                   </div>
                 </div>
 
-                {/* Privacy & Button Column-spanning */}
+                {/* Campo honeypot - oculto para humanos, los bots lo llenarán */}
+                <input
+                  type="text"
+                  name="website"
+                  value={formData.website}
+                  onChange={handleChange}
+                  style={{ position: "absolute", left: "-9999px", opacity: 0 }}
+                  tabIndex={-1}
+                  autoComplete="off"
+                  aria-hidden="true"
+                />
+
+                {/* Privacidad y Botón - Ocupa ambas columnas */}
                 <div className="lg:col-span-2 space-y-8 pt-10 border-t border-gray-50">
                   <div className="flex flex-col gap-4">
                     <div className="flex items-center gap-4">
@@ -651,7 +677,7 @@ export default function Contacto() {
                       />
                     )}
 
-                    {/* Stealth shine effect */}
+                    {/* Efecto de brillo sutil */}
                     <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent skew-x-[-20deg] translate-x-[-200%] group-hover:translate-x-[200%] duration-[1.5s]" />
                   </button>
                 </div>
