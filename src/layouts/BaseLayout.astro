@@ -1,0 +1,257 @@
+---
+import { ViewTransitions } from 'astro:transitions';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import PageTransition from '../components/PageTransition.astro';
+import SmoothScroll from '../components/react/SmoothScroll';
+import LoadingScreen from '../components/LoadingScreen';
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description?: string;
+  image?: string;
+}
+
+const { 
+  title, 
+  description = "Soluciones visuales inteligentes que impulsan la innovación tecnológica. Pantallas LED de alto impacto para empresas.",
+  image = "/vp-logo.png"
+} = Astro.props;
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+---
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content={description} />
+  <meta name="author" content="Visual Point" />
+  
+  <!-- Canonical -->
+  <link rel="canonical" href={canonicalURL} />
+  
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content={canonicalURL} />
+  <meta property="og:title" content={`${title} | Visual Point`} />
+  <meta property="og:description" content={description} />
+  <meta property="og:image" content={image} />
+  <meta property="og:locale" content="es_PE" />
+  
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content={`${title} | Visual Point`} />
+  <meta name="twitter:description" content={description} />
+  <meta name="twitter:image" content={image} />
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  
+  <!-- Preconnect para fuentes -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Montserrat:wght@400;500;600;700;800;900&family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  
+  <title>{title} | Visual Point</title>
+  
+  <!-- Astro View Transitions -->
+  <ViewTransitions />
+  
+  <!-- Page Transition Styles are in global.css -->
+</head>
+<body class="min-h-screen flex flex-col overflow-x-hidden bg-brand-white text-text-primary font-sans antialiased">
+  <script is:inline>
+    /**
+     * RÉPLICA EXACTA DEL FLUJO SPA (1:1)
+     */
+    (function() {
+      const isInternalNav = sessionStorage.getItem('vp-navigating') === 'true';
+      const path = window.location.pathname;
+
+      // 1. LÓGICA DE INYECCIÓN INICIAL (Síncrona)
+      // Si NO venimos de una transición de Astro (ej. carga inicial o F5),
+      // forzamos el estado de carga (ocultar contenido).
+      if (!isInternalNav) {
+        document.documentElement.classList.add('is-loading');
+      } else {
+        document.documentElement.classList.remove('is-loading');
+      }
+
+      // REDIRECCIÓN FORZADA (Requerimiento del usuario)
+      if (!isInternalNav && path !== '/' && !path.includes('admin') && !window._vpRedirecting) {
+        window._vpRedirecting = true;
+        window.location.href = '/';
+        return;
+      }
+
+      // Singleton protection para los event listeners y procesos pesados
+      if (window._vpInitialized) return;
+      window._vpInitialized = true;
+
+      const getLoader = () => document.getElementById('loading-screen-wrapper');
+      const getOverlay = () => document.getElementById('page-transition-overlay');
+
+      // 2. LÓGICA DE CARGA INICIAL (Diferida al DOM ready)
+      function initAppFlow() {
+        if (!isInternalNav) {
+          const loader = getLoader();
+          if (!loader) {
+            document.documentElement.classList.remove('is-loading');
+            return;
+          }
+
+          // Mostrar el cargador por 1.8s (según App.tsx original)
+          setTimeout(() => {
+            loader.style.transition = 'opacity 0.8s ease-out';
+            loader.style.opacity = '0';
+            loader.style.pointerEvents = 'none';
+            
+            setTimeout(() => {
+              loader.style.display = 'none';
+              // Revelar el contenido de la web solo después de que el loader se haya ido
+              document.documentElement.classList.remove('is-loading');
+            }, 800);
+          }, 1800);
+        } else {
+          const loader = getLoader();
+          if (loader) loader.style.display = 'none';
+          document.documentElement.classList.remove('is-loading');
+        }
+      }
+
+      // Esperar a que el DOM exista antes de manipularlo
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initAppFlow);
+      } else {
+        initAppFlow();
+      }
+
+      // 3. NUEVA LÓGICA DE TRANSICIONES (Fade Overlay Sólido - 100% libre de errores)
+      document.addEventListener('astro:before-preparation', () => {
+        sessionStorage.setItem('vp-navigating', 'true');
+        const overlay = getOverlay();
+        if (overlay) {
+          // Mostrar transición sólida instantáneamente
+          overlay.style.pointerEvents = 'all';
+          overlay.style.transition = 'opacity 0.2s ease-out';
+          overlay.style.opacity = '1';
+        }
+      });
+
+      document.addEventListener('astro:after-swap', () => {
+        document.documentElement.classList.remove('is-loading'); 
+        const loader = getLoader();
+        if (loader) loader.style.display = 'none';
+
+        const overlay = getOverlay();
+        if (overlay) {
+          // Desvanecer suavemente luego de cargar la nueva página
+          setTimeout(() => {
+            overlay.style.transition = 'opacity 0.5s ease-in-out';
+            overlay.style.opacity = '0';
+            overlay.style.pointerEvents = 'none';
+            sessionStorage.removeItem('vp-navigating');
+          }, 100);
+        }
+      });
+
+      // 4. UTILIDADES & SCROLL
+      function initUtils() {
+        const bar = document.getElementById('scroll-bar');
+        if (bar) {
+          const update = () => {
+            const winScroll = document.documentElement.scrollTop || document.body.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            bar.style.width = scrolled + '%';
+          };
+          window.removeEventListener('scroll', window._vpScrollHandler);
+          window._vpScrollHandler = update;
+          window.addEventListener('scroll', update);
+          update();
+        }
+        
+        if (sessionStorage.getItem('vp-navigating') === 'true') {
+          window.scrollTo(0, 0);
+        }
+      }
+
+      document.addEventListener('astro:page-load', initUtils);
+      initUtils();
+    })();
+  </script>
+  
+  <!-- Loading Screen (solo carga inicial / refresh) -->
+  <div id="loading-screen-wrapper" transition:persist>
+    <LoadingScreen client:load />
+  </div>
+  
+  <!-- Page Transition Overlay (solo navegación entre páginas) -->
+  <PageTransition transition:persist />
+  
+  <!-- Smooth Scroll Provider -->
+  <SmoothScroll client:load />
+  
+  <!-- Scroll Progress Indicator -->
+  <div id="scroll-progress" class="fixed top-0 left-0 w-full h-[3px] bg-transparent z-[10000]">
+    <div id="scroll-bar" class="h-full bg-gradient-to-r from-brand-celeste to-brand-dark w-0 transition-all duration-100"></div>
+  </div>
+  
+  <Header />
+  
+  <main id="main-content" class="flex-1">
+    <slot />
+  </main>
+  
+  <Footer />
+  
+  <!-- WhatsApp Floating Button -->
+  <a
+    href="https://wa.me/51995119509"
+    target="_blank"
+    rel="noopener noreferrer"
+    class="whatsapp-float group fixed bottom-6 right-6 z-[9998] w-14 h-14 bg-brand-dark hover:bg-brand-celeste rounded-full flex items-center justify-center shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-110"
+    aria-label="Contactar por WhatsApp"
+  >
+    <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="white">
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+    </svg>
+    <!-- Tooltip -->
+    <span class="absolute right-full mr-3 px-3 py-2 bg-brand-dark text-white text-sm font-medium rounded-lg whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+      ¡Escríbenos!
+    </span>
+  </a>
+  
+  <style>
+    /* Estilos para ocultar el contenido durante la carga inicial */
+    html.is-loading #main-content,
+    html.is-loading header,
+    html.is-loading footer {
+      opacity: 0;
+      pointer-events: none;
+    }
+    
+    #main-content, header, footer {
+      transition: opacity 0.8s ease-in-out;
+    }
+
+    #loading-screen-wrapper {
+      position: fixed;
+      inset: 0;
+      z-index: 99999;
+    }
+    
+    .whatsapp-float {
+      animation: pulse-shadow 2s infinite;
+    }
+    
+    @keyframes pulse-shadow {
+      0%, 100% { box-shadow: 0 4px 20px rgba(0, 40, 86, 0.3); }
+      50% { box-shadow: 0 4px 30px rgba(0, 163, 221, 0.5); }
+    }
+  </style>
+</body>
+</html>

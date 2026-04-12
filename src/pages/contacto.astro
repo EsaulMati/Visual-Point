@@ -1,0 +1,53 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ContactForm from '../components/react/ContactForm';
+---
+
+<BaseLayout 
+  title="Contacto" 
+  description="Contáctanos para una asesoría personalizada sobre soluciones LED. Formulario de contacto Visual Point."
+>
+  <!-- Hero Section -->
+  <section class="relative pt-24 pb-16 md:pt-32 md:pb-20 px-6 md:px-20 text-left led-grid">
+    <div class="absolute top-0 left-0 right-0 h-[60vh] bg-gradient-to-br from-brand-celeste/10 to-transparent -z-10"></div>
+    <div class="max-w-7xl mx-auto space-y-10">
+      <div class="space-y-6">
+        <div class="flex items-center gap-3 fade-in-up" style="animation-delay: 0.1s;">
+          <div class="w-10 h-[1px] bg-brand-celeste"></div>
+          <span class="text-brand-celeste font-black text-xs tracking-widest uppercase">
+            Visual Point
+          </span>
+        </div>
+        <h1 class="text-4xl sm:text-6xl md:text-9xl font-display font-black text-brand-dark leading-[0.85] tracking-tighter fade-in-up" style="animation-delay: 0.2s;">
+          Diseñemos <br />
+          <span class="text-brand-celeste">tu impacto.</span>
+        </h1>
+      </div>
+      <p class="text-xl md:text-3xl text-text-secondary leading-tight max-w-2xl font-light fade-in-up" style="animation-delay: 0.3s;">
+        Lleva tu comunicación visual al siguiente nivel con soporte técnico especializado y tecnología de punta.
+      </p>
+    </div>
+  </section>
+
+  <!-- Form Section -->
+  <section class="px-6 md:px-20 pb-16">
+    <div class="max-w-7xl mx-auto">
+      <div class="bg-white rounded-[64px] border border-gray-100 shadow-[0_50px_120px_-30px_rgba(0,40,86,0.12)] p-8 md:p-20 relative fade-in-up" style="animation-delay: 0.4s;">
+        <div class="absolute -top-1 px-6 md:px-12 py-3 md:py-4 bg-brand-dark text-white rounded-full text-[9px] md:text-[12px] uppercase font-black tracking-wider md:tracking-widest translate-y-[-50%] ml-0 md:ml-12 shadow-2xl font-accent border-4 border-white">
+          Formulario de Contacto • Visual Point
+        </div>
+
+        <ContactForm client:load />
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .fade-in-up {
+    animation: fadeInUp 0.8s ease forwards;
+    opacity: 0;
+  }
+
+  @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+</style>

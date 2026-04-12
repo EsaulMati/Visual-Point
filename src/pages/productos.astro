@@ -1,0 +1,228 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const SOLUTIONS = [
+  {
+    id: "outdoor",
+    title: "Pantallas publicitarias LED Outdoor",
+    desc: "Grandes formatos para avenidas, fachadas de edificios, rooftops o mobiliario urbano.",
+    image: "/Outdoor.png",
+  },
+  {
+    id: "indoor",
+    title: "Pantallas LED Indoor",
+    desc: "Perfectas para centros comerciales, ferias, tiendas y eventos corporativos.",
+    image: "/Indoor.png",
+  },
+  {
+    id: "totems",
+    title: "Tótems y paneles digitales interactivos",
+    desc: "Ideales para puntos de venta, lobbies, campañas informativas y más.",
+    image: "/Totems.png",
+  },
+  {
+    id: "custom",
+    title: "Pantallas personalizadas",
+    desc: "Nos adaptamos a tu espacio, diseño y objetivos.",
+    image: "/Personalizada.png",
+  },
+];
+
+const SECTORS = [
+  { name: "Agencias de publicidad", desc: "Campañas urbanas de alto impacto y gestión remota de contenidos.", icon: "Megaphone" },
+  { name: "Centros comerciales", desc: "Señalización digital dinámica y experiencias inmersivas.", icon: "Building2" },
+  { name: "Marcas retail", desc: "Escaparatismo LED y pantallas de punto de venta premium.", icon: "ShoppingBag" },
+  { name: "Eventos corporativos", desc: "Montaje de pantallas de gran formato para lanzamientos.", icon: "Presentation" },
+  { name: "Instituciones públicas", desc: "Paneles informativos y señalética de emergencia.", icon: "Landmark" },
+  { name: "Negocios locales", desc: "Soluciones accesibles para aumentar el tráfico de clientes.", icon: "Store" },
+];
+---
+
+<BaseLayout 
+  title="Productos" 
+  description="Descubre nuestra gama de soluciones LED: pantallas outdoor, indoor, tótems interactivos y pantallas personalizadas."
+>
+  <!-- Hero Section -->
+  <section class="relative pt-24 pb-12 md:pt-32 md:pb-16 px-6 md:px-20 bg-[#FCFCFC] text-brand-dark overflow-hidden led-grid">
+    <div class="absolute top-0 right-0 w-full h-full opacity-5 pointer-events-none -z-0">
+      <div class="absolute top-10 right-10 w-96 h-96 bg-brand-celeste rounded-full border border-brand-celeste/20 blur-3xl"></div>
+    </div>
+
+    <div class="max-w-7xl mx-auto relative z-10">
+      <div class="max-w-3xl space-y-8">
+        <div class="space-y-4">
+          <span class="section-header inline-block text-brand-celeste font-black text-[12px] tracking-widest uppercase fade-in-up" style="animation-delay: 0.1s;">
+            Ecosistema Visual
+          </span>
+          <h1 class="section-header text-4xl sm:text-5xl md:text-8xl font-display font-black text-brand-dark leading-[0.9] tracking-tighter fade-in-up" style="animation-delay: 0.2s;">
+            Gama de <br />
+            <span class="text-brand-celeste">soluciones LED</span>
+          </h1>
+        </div>
+
+        <p class="section-header text-xl md:text-2xl text-brand-dark/70 leading-relaxed font-light fade-in-up" style="animation-delay: 0.3s;">
+          Ofrecemos una amplia gama de soluciones LED de alto impacto para potenciar la visibilidad de tu marca en cualquier entorno.
+        </p>
+        <div class="section-header w-12 h-1 bg-brand-celeste fade-in-up" style="animation-delay: 0.4s;"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Solutions Catalog -->
+  <section class="py-24 px-6 md:px-20 bg-white overflow-hidden">
+    <div class="max-w-7xl mx-auto">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-12">
+        {SOLUTIONS.map((item, idx) => (
+          <div class={`solution-card group relative space-y-10 ${idx % 2 === 1 ? 'md:mt-24' : ''}`}>
+            <!-- Background Index -->
+            <span class="absolute -top-12 -left-4 text-9xl font-display font-black text-brand-dark/[0.03] select-none pointer-events-none group-hover:text-brand-celeste/[0.05] transition-colors duration-700">
+              0{idx + 1}
+            </span>
+
+            <!-- Product Image -->
+            <div class="relative aspect-video bg-gray-50/50 backdrop-blur-sm rounded-[48px] border border-gray-100 overflow-hidden transition-all duration-700 group-hover:border-brand-celeste/20 group-hover:shadow-[0_40px_80px_-20px_rgba(0,183,235,0.15)] group-hover:-translate-y-4">
+              <img
+                src={item.image}
+                alt={item.title}
+                class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+              />
+
+              <div class="absolute inset-0 bg-gradient-to-t from-brand-dark/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+
+              <div class="absolute bottom-6 left-6 flex items-center gap-3 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                <div class="w-2 h-2 rounded-full bg-brand-celeste animate-pulse"></div>
+                <span class="text-[10px] uppercase font-bold tracking-widest text-white">
+                  VP SOLUCIÓN: {item.id}
+                </span>
+              </div>
+            </div>
+
+            <!-- Product Text -->
+            <div class="space-y-6 px-4 sm:px-10">
+              <div class="space-y-2">
+                <h3 class="text-3xl md:text-4xl font-display font-black text-brand-dark leading-tight group-hover:text-brand-celeste transition-colors duration-500">
+                  {item.title}
+                </h3>
+                <div class="w-0 group-hover:w-16 h-1 bg-brand-celeste transition-all duration-700"></div>
+              </div>
+              <p class="text-lg text-text-secondary leading-relaxed font-light max-w-sm">
+                {item.desc}
+              </p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Tech Divider -->
+  <div class="tech-divider"></div>
+
+  <!-- Sectors Section -->
+  <section class="py-16 px-0 bg-white">
+    <div class="max-w-7xl mx-auto px-6 md:px-20 space-y-10">
+      <!-- Header Banner -->
+      <div class="relative bg-brand-dark rounded-3xl py-8 px-12 text-center overflow-hidden border-y-4 border-brand-celeste">
+        <h2 class="text-4xl md:text-6xl font-display font-black text-white leading-none tracking-tighter">
+          Sectores que <br />
+          <span class="text-brand-celeste">atendemos</span>
+        </h2>
+      </div>
+
+      <!-- Industry Image -->
+      <div class="relative w-full aspect-[21/9] bg-gray-100 rounded-[40px] overflow-hidden shadow-2xl border border-gray-100">
+        <img
+          src="/Imagen17.png"
+          alt="Industria LED"
+          class="w-full h-full object-cover opacity-90 hover:scale-105 transition-transform duration-[3s]"
+        />
+        <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"></div>
+      </div>
+
+      <!-- Description -->
+      <div class="max-w-3xl mx-auto text-center space-y-6">
+        <p class="text-xl text-text-secondary leading-relaxed font-light">
+          Desde retail hasta grandes infraestructuras públicas, adaptamos nuestra tecnología para responder a las exigencias críticas de cada industria.
+        </p>
+        <div class="w-12 h-1 bg-brand-celeste mx-auto"></div>
+      </div>
+
+      <!-- Sectors Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {SECTORS.map((sector) => (
+          <div class="card-hover group flex items-center gap-6 p-8 bg-gray-50/50 rounded-3xl border border-gray-100 hover:bg-white hover:border-brand-celeste/20 transition-all duration-500">
+            <div class="w-14 h-14 rounded-2xl bg-white flex items-center justify-center text-brand-dark group-hover:bg-brand-celeste group-hover:text-white group-hover:rotate-6 transition-all duration-500 shadow-sm border border-gray-100">
+              {sector.icon === "Megaphone" && (
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="m3 11 18-5v12L3 13v-2z"></path>
+                  <path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"></path>
+                </svg>
+              )}
+              {sector.icon === "Building2" && (
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"></path>
+                  <path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"></path>
+                  <path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"></path>
+                  <path d="M10 6h4"></path>
+                  <path d="M10 10h4"></path>
+                  <path d="M10 14h4"></path>
+                  <path d="M10 18h4"></path>
+                </svg>
+              )}
+              {sector.icon === "ShoppingBag" && (
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"></path>
+                  <path d="M3 6h18"></path>
+                  <path d="M16 10a4 4 0 0 1-8 0"></path>
+                </svg>
+              )}
+              {sector.icon === "Presentation" && (
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M2 3h20"></path>
+                  <path d="M21 3v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V3"></path>
+                  <path d="m7 21 5-5 5 5"></path>
+                </svg>
+              )}
+              {sector.icon === "Landmark" && (
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="3" x2="21" y1="22" y2="22"></line>
+                  <line x1="6" x2="6" y1="18" y2="11"></line>
+                  <line x1="10" x2="10" y1="18" y2="11"></line>
+                  <line x1="14" x2="14" y1="18" y2="11"></line>
+                  <line x1="18" x2="18" y1="18" y2="11"></line>
+                  <polygon points="12 2 20 7 4 7"></polygon>
+                </svg>
+              )}
+              {sector.icon === "Store" && (
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="m2 7 4.41-4.41A2 2 0 0 1 7.83 2h8.34a2 2 0 0 1 1.42.59L22 7"></path>
+                  <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path>
+                  <path d="M15 22v-4a2 2 0 0 0-2-2h-2a2 2 0 0 0-2 2v4"></path>
+                  <path d="M2 7h20"></path>
+                  <path d="M22 7v3a2 2 0 0 1-2 2v0a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 16 12a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 12 12a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 8 12a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 4 12v0a2 2 0 0 1-2-2V7"></path>
+                </svg>
+              )}
+            </div>
+            <div class="space-y-1">
+              <span class="block font-display font-bold text-lg text-brand-dark leading-none group-hover:text-brand-celeste transition-colors duration-300">
+                {sector.name}
+              </span>
+              <p class="text-[10px] text-text-secondary uppercase tracking-widest opacity-60">
+                Solución Especializada
+              </p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .fade-in-up {
+    animation: fadeInUp 0.8s ease forwards;
+    opacity: 0;
+  }
+
+  @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+</style>

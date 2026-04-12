@@ -1,0 +1,218 @@
+---
+const NAV_LINKS = [
+  { name: "Inicio", path: "/" },
+  { name: "Nosotros", path: "/nosotros" },
+  { name: "Productos", path: "/productos" },
+  { name: "Proyectos", path: "/proyectos" },
+  { name: "Contacto", path: "/contacto" },
+];
+
+const currentPath = Astro.url.pathname;
+---
+
+<nav id="navbar" class="fixed top-0 left-0 w-full h-24 sm:h-32 bg-transparent border-none px-4 sm:px-16 flex items-center transition-all duration-700 ease-in-out z-50">
+  <!-- Estado Normal: Logo completo -->
+  <div class="nav-state-normal w-full flex items-center justify-between">
+    <a href="/" class="flex-shrink-0 -ml-2">
+      <img
+        src="/vp-logo.png"
+        alt="Visual Point"
+        class="h-20 object-contain"
+      />
+    </a>
+    
+    <!-- Desktop Navigation -->
+    <div class="hidden lg:flex space-x-12">
+      {NAV_LINKS.map((link) => (
+        <a
+          href={link.path}
+          class:list={[
+            "nav-link relative py-1 text-sm font-bold uppercase tracking-widest transition-colors duration-300 hover:text-brand-celeste",
+            currentPath === link.path
+              ? "text-brand-celeste"
+              : "text-brand-dark/80"
+          ]}
+        >
+          {link.name}
+        </a>
+      ))}
+    </div>
+
+    <!-- Mobile Menu Button (Normal) -->
+    <button
+      id="mobile-menu-btn"
+      class="lg:hidden p-2 text-brand-dark"
+      aria-label="Abrir menú"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="3" y1="12" x2="21" y2="12"></line>
+        <line x1="3" y1="6" x2="21" y2="6"></line>
+        <line x1="3" y1="18" x2="21" y2="18"></line>
+      </svg>
+    </button>
+  </div>
+
+  <!-- Estado Scrolled: Pastilla compacta con logo + INICIO + hamburguesa -->
+  <div class="nav-state-scrolled hidden w-full items-center justify-between">
+    <!-- Logo Icon -->
+    <a href="/" class="flex-shrink-0">
+      <img
+        src="/vp-logo-icono.png"
+        alt="VP"
+        class="h-10 sm:h-12 w-auto object-contain"
+      />
+    </a>
+
+    <!-- Center: "Inicio" Link -->
+    <a
+      href="/"
+      class="absolute left-1/2 -translate-x-1/2 text-brand-celeste text-xs sm:text-sm font-bold tracking-wider sm:tracking-widest uppercase hover:opacity-70 transition-opacity"
+    >
+      Inicio
+    </a>
+
+    <!-- Hamburger Button -->
+    <button
+      id="mobile-menu-btn-scrolled"
+      class="p-2 text-brand-celeste transition-colors flex-shrink-0 -mr-1"
+      aria-label="Abrir menú"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="3" y1="12" x2="21" y2="12"></line>
+        <line x1="3" y1="6" x2="21" y2="6"></line>
+        <line x1="3" y1="18" x2="21" y2="18"></line>
+      </svg>
+    </button>
+  </div>
+</nav>
+
+<!-- Mobile Menu Overlay - Dropdown Style -->
+<div
+  id="mobile-menu"
+  class="fixed top-28 left-1/2 -translate-x-1/2 w-full max-w-[400px] bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden transition-all duration-500 origin-top z-[60] opacity-0 scale-95 -translate-y-4 pointer-events-none"
+>
+  <div class="p-5 space-y-1">
+    <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2 font-accent px-3">
+      Explorar
+    </p>
+    {NAV_LINKS.map((link, i) => (
+      <a
+        href={link.path}
+        class="flex items-center space-x-6 group p-4 rounded-[24px] hover:bg-brand-gray-light transition-all active:scale-95"
+      >
+        <span class="text-[10px] font-black text-brand-celeste/40 font-accent group-hover:text-brand-celeste transition-colors">
+          0{i + 1}
+        </span>
+        <span
+          class:list={[
+            "text-2xl font-display font-black tracking-tighter transition-colors",
+            currentPath === link.path
+              ? "text-brand-celeste"
+              : "text-brand-dark group-hover:text-brand-celeste"
+          ]}
+        >
+          {link.name}
+        </span>
+      </a>
+    ))}
+  </div>
+</div>
+
+<script is:inline>
+  /**
+   * Encapsulamos la lógica en una función que se ejecute en cada carga de página de Astro.
+   * Esto es vital para que al navegar entre páginas (ViewTransitions), los elementos
+   * del DOM se vuelvan a capturar y los listeners se vuelvan a vincular.
+   */
+  function initNavbar() {
+    const navbar = document.getElementById('navbar');
+    const menuBtn = document.getElementById('mobile-menu-btn');
+    const menuBtnScrolled = document.getElementById('mobile-menu-btn-scrolled');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const navStateNormal = document.querySelector('.nav-state-normal');
+    const navStateScrolled = document.querySelector('.nav-state-scrolled');
+    
+    let isMenuOpen = false;
+    
+    function openMenu() {
+      isMenuOpen = true;
+      if (mobileMenu) {
+        mobileMenu.classList.remove('opacity-0', 'scale-95', '-translate-y-4', 'pointer-events-none');
+        mobileMenu.classList.add('opacity-100', 'scale-100', 'translate-y-0', 'pointer-events-auto');
+      }
+    }
+    
+    function closeMenu() {
+      isMenuOpen = false;
+      if (mobileMenu) {
+        mobileMenu.classList.add('opacity-0', 'scale-95', '-translate-y-4', 'pointer-events-none');
+        mobileMenu.classList.remove('opacity-100', 'scale-100', 'translate-y-0', 'pointer-events-auto');
+      }
+    }
+    
+    function toggleMenu() {
+      isMenuOpen ? closeMenu() : openMenu();
+    }
+    
+    if (menuBtn) menuBtn.onclick = toggleMenu;
+    if (menuBtnScrolled) menuBtnScrolled.onclick = toggleMenu;
+    
+    // Cerrar menú al hacer clic en un enlace
+    if (mobileMenu) {
+      const links = mobileMenu.querySelectorAll('a');
+      links.forEach(link => {
+        link.addEventListener('click', closeMenu);
+      });
+    }
+
+    // Cerrar al hacer clic fuera
+    const outsideClickListener = function(e) {
+      if (isMenuOpen && 
+          mobileMenu && !mobileMenu.contains(e.target) && 
+          menuBtn && !menuBtn.contains(e.target) && 
+          menuBtnScrolled && !menuBtnScrolled.contains(e.target)) {
+        closeMenu();
+      }
+    };
+    document.addEventListener('click', outsideClickListener);
+    
+    // Lógica de scroll
+    function handleScroll() {
+      const scrolled = window.scrollY > 50;
+      
+      if (scrolled) {
+        if (navbar) {
+          navbar.classList.remove('top-0', 'left-0', 'w-full', 'h-24', 'sm:h-32', 'bg-transparent', 'sm:px-16');
+          navbar.classList.add('top-4', 'left-1/2', '-translate-x-1/2', 'w-[calc(100%-1.5rem)]', 'max-w-md', 'h-16', 'sm:h-20', 'bg-white/95', 'backdrop-blur-xl', 'shadow-[0_20px_50px_rgba(0,0,0,0.1)]', 'border', 'border-white/20', 'rounded-full', 'sm:px-8');
+        }
+        if (navStateNormal) navStateNormal.classList.add('hidden');
+        if (navStateScrolled) {
+          navStateScrolled.classList.remove('hidden');
+          navStateScrolled.classList.add('flex');
+        }
+      } else {
+        if (navbar) {
+          navbar.classList.add('top-0', 'left-0', 'w-full', 'h-24', 'sm:h-32', 'bg-transparent', 'sm:px-16');
+          navbar.classList.remove('top-4', 'left-1/2', '-translate-x-1/2', 'w-[calc(100%-1.5rem)]', 'max-w-md', 'h-16', 'sm:h-20', 'bg-white/95', 'backdrop-blur-xl', 'shadow-[0_20px_50px_rgba(0,0,0,0.1)]', 'border', 'border-white/20', 'rounded-full', 'sm:px-8');
+        }
+        if (navStateNormal) navStateNormal.classList.remove('hidden');
+        if (navStateScrolled) {
+          navStateScrolled.classList.add('hidden');
+          navStateScrolled.classList.remove('flex');
+        }
+        closeMenu();
+      }
+    }
+    
+    // Limpiar listener previo antes de añadir uno nuevo para evitar fugas/duplicados
+    window.removeEventListener('scroll', window._vpScrollHandler);
+    window._vpScrollHandler = handleScroll;
+    window.addEventListener('scroll', handleScroll);
+    
+    // Ejecutar una vez al inicio
+    handleScroll();
+  }
+
+  // Escuchar el evento de carga de Astro
+  document.addEventListener('astro:page-load', initNavbar);
+</script>
