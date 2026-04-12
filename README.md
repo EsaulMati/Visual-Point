@@ -1,17 +1,29 @@
-# Visual Point Landing Page
+# Visual Point - Astro Project
 
-Welcome to the Visual Point corporate landing page project.
+Bienvenido al proyecto de la página corporativa de Visual Point, ahora migrado a **Astro** para un rendimiento óptimo y una mejor arquitectura de componentes.
 
-## Overview
-This is a modern, high-performance React application built with Vite, Tailwind CSS, and GSAP for animations. It features smooth scrolling, infinite carousels, and responsive layouts tailored for specialized displays and LED products.
+## Descripción
+Esta es una landing page moderna de alto rendimiento que utiliza **Astro**, **React** (Islands Architecture), **Tailwind CSS**, y **GSAP** para animaciones fluidas. Incluye scroll suave, efectos de red LED y layouts responsivos diseñados para una estética premium.
 
-## Run Locally
+## Ejecución Local
 
-**Prerequisites:** Node.js 18+
+**Requisitos:** Node.js 18.17.1 o superior.
 
-1. Install dependencies:
-   `npm install`
-2. Run the development server:
-   `npm run dev`
-3. Build for production:
-   `npm run build`
+1. Instalar dependencias:
+   ```bash
+   npm install
+   ```
+2. Ejecutar servidor de desarrollo:
+   ```bash
+   npm run dev
+   ```
+3. Construir para producción:
+   ```bash
+   npm run build
+   ```
+
+## Estructura
+- `src/pages/`: Rutas de la aplicación (.astro)
+- `src/components/`: Componentes reutilizables (.astro y .tsx)
+- `src/layouts/`: Estructura base de las páginas
+- `public/`: Assets estáticos e imágenes
