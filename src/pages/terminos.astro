@@ -1,0 +1,71 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout 
+  title="Términos y Condiciones" 
+  description="Términos y Condiciones de uso de Visual Point. Información sobre servicios, ventas y garantías de nuestras pantallas LED."
+>
+  <section class="legal-page-header-offset pb-24 px-6 md:px-20 max-w-4xl mx-auto">
+    <div class="mb-12">
+      <span class="text-brand-celeste font-bold text-[10px] tracking-widest uppercase mb-4 block">
+        Legal
+      </span>
+      <h1 class="text-3xl md:text-5xl font-display font-black text-brand-dark mb-6">
+        Términos y Condiciones
+      </h1>
+      <div class="w-12 h-1 bg-brand-celeste"></div>
+    </div>
+
+    <div class="prose prose-lg text-text-secondary">
+      <p class="mb-6">
+        Bienvenido a <strong>Visual Point</strong>. Al acceder a nuestro sitio web y solicitar nuestros servicios, aceptas cumplir con los siguientes términos y condiciones. Por favor, lee cuidadosamente esta información antes de proceder con cualquier cotización o compra.
+      </p>
+
+      <h3 class="text-xl font-bold text-brand-dark mt-10 mb-4">1. Servicios y Cotizaciones</h3>
+      <p class="mb-4">
+        Visual Point se especializa en la venta, instalación y asesoramiento de pantallas LED y soluciones de visualización táctil e interactiva.
+      </p>
+      <ul class="list-disc pl-6 mb-6 space-y-2">
+        <li>Toda cotización enviada tiene una validez máxima de 15 días calendario, sujeta a disponibilidad de stock al momento de la confirmación.</li>
+        <li>Los precios indicados en las propuestas comerciales son referenciales hasta la firma del acuerdo final o pago del adelanto correspondiente.</li>
+      </ul>
+
+      <h3 class="text-xl font-bold text-brand-dark mt-10 mb-4">2. Instalación y Ejecución</h3>
+      <p class="mb-4">
+        Los proyectos de instalación contemplan una evaluación técnica previa. El cliente es responsable de garantizar los permisos de acceso y las adecuaciones eléctricas o de infraestructura básicas indicadas por nuestro equipo técnico antes de la instalación.
+      </p>
+
+      <h3 class="text-xl font-bold text-brand-dark mt-10 mb-4">3. Garantías y Soporte Técnico</h3>
+      <p class="mb-4">
+        Nuestras pantallas LED cuentan con una garantía de fábrica detallada en su contrato de compra. La garantía cubre defectos de fabricación y funcionamiento de los componentes internos (módulos, fuentes, controladoras).
+      </p>
+      <p class="mb-6">
+        <strong>Se excluyen de la garantía:</strong> Daños por negligencia, choques eléctricos externos por mala manipulación, desastres naturales, actos vandálicos, o manipulaciones por personal no autorizado por Visual Point.
+      </p>
+
+      <h3 class="text-xl font-bold text-brand-dark mt-10 mb-4">4. Propiedad Intelectual</h3>
+      <p class="mb-4">
+        Todo el material visual, código, diseños y logotipos presentes en esta página son propiedad exclusiva de Visual Point. Está prohibida su reproducción sin previa autorización.
+      </p>
+
+      <h3 class="text-xl font-bold text-brand-dark mt-10 mb-4">5. Modificaciones</h3>
+      <p class="mb-4">
+        Nos reservamos el derecho de modificar estos términos en cualquier momento. Se recomienda revisar esta página periódicamente para estar al tanto de posibles cambios.
+      </p>
+
+      <div class="mt-12 p-6 bg-brand-celeste/5 rounded-2xl border border-brand-celeste/10">
+        <p class="text-sm m-0">
+          <strong>Última actualización:</strong> {new Date().toLocaleDateString('es-PE', { year: 'numeric', month: 'long', day: 'numeric' })}<br/>
+          Si tienes alguna duda sobre estos términos, escríbenos a <a href="mailto:comercial.visualpoint@gmail.com" class="text-brand-celeste hover:underline">comercial.visualpoint@gmail.com</a>.
+        </p>
+      </div>
+
+      <div class="mt-8 pt-8 border-t border-gray-100 italic text-[10px] text-gray-400">
+        <p>
+          Nota: Este documento es una plantilla referencial generada para Visual Point. Para asegurar el cumplimiento total de las normativas legales vigentes, se recomienda la revisión de estos textos por parte de un asesor legal especializado.
+        </p>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,75 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout 
+  title="Políticas de Privacidad" 
+  description="Políticas de Privacidad de Visual Point. Conoce cómo protegemos y gestionamos tus datos personales bajo las leyes peruanas."
+>
+  <section class="legal-page-header-offset pb-24 px-6 md:px-20 max-w-4xl mx-auto">
+    <div class="mb-12">
+      <span class="text-brand-celeste font-bold text-[10px] tracking-widest uppercase mb-4 block">
+        Legal
+      </span>
+      <h1 class="text-3xl md:text-5xl font-display font-black text-brand-dark mb-6">
+        Políticas de Privacidad
+      </h1>
+      <div class="w-12 h-1 bg-brand-celeste"></div>
+    </div>
+
+    <div class="prose prose-lg text-text-secondary">
+      <p class="mb-6">
+        En <strong>Visual Point</strong> valoramos profundamente tu privacidad y nos comprometemos a resguardar la seguridad de tus datos personales. Esta Política de Privacidad describe cómo recopilamos, utilizamos y protegemos tu información en cumplimiento con la <strong>Ley N° 29733, Ley de Protección de Datos Personales del Perú</strong>, y su Reglamento.
+      </p>
+
+      <h3 class="text-xl font-bold text-brand-dark mt-10 mb-4">1. Recopilación de Datos Personales</h3>
+      <p class="mb-4">
+        A través de nuestros formularios web de contacto y nuestros canales de WhatsApp, recopilamos información estrictamente necesaria para poder comunicarnos contigo y brindarte los servicios que solicitas, tales como:
+      </p>
+      <ul class="list-disc pl-6 mb-6 space-y-2">
+        <li>Nombre completo.</li>
+        <li>Correo electrónico y número de teléfono.</li>
+        <li>Requerimientos técnicos específicos de tu proyecto.</li>
+      </ul>
+
+      <h3 class="text-xl font-bold text-brand-dark mt-10 mb-4">2. Finalidad del Tratamiento de Datos</h3>
+      <p class="mb-4">
+        Tus datos serán utilizados de manera confidencial exclusivamente para los siguientes fines:
+      </p>
+      <ul class="list-disc pl-6 mb-6 space-y-2">
+        <li>Elaboración, envío y seguimiento de cotizaciones personalizadas.</li>
+        <li>Coordinación de reuniones, visitas técnicas o instalación de proyectos.</li>
+        <li>Eventualmente, enviar información relevante o actualizaciones de nuestros servicios de tecnología LED (pudiendo cancelar la suscripción en cualquier momento).</li>
+      </ul>
+
+      <h3 class="text-xl font-bold text-brand-dark mt-10 mb-4">3. Consentimiento y Seguridad</h3>
+      <p class="mb-4">
+        Al hacer uso del formulario de contacto y proporcionar tu información, otorgas tu consentimiento libre e inequívoco para que tus datos sean almacenados en nuestra base de datos.
+        Visual Point ha adoptado las medidas técnicas y organizacionales necesarias para evitar la alteración, pérdida, acceso o tratamiento no autorizado de tus datos personales.
+      </p>
+
+      <h3 class="text-xl font-bold text-brand-dark mt-10 mb-4">4. Derechos ARCO</h3>
+      <p class="mb-4">
+        En cualquier momento, como titular de tus datos personales, puedes ejercer tus derechos de Acceso, Rectificación, Cancelación y Oposición (Derechos ARCO), enviando tu solicitud formal al correo electrónico detallado a continuación.
+      </p>
+
+      <h3 class="text-xl font-bold text-brand-dark mt-10 mb-4">5. Transferencia a Terceros</h3>
+      <p class="mb-4">
+        Tus datos no son vendidos, cedidos ni compartidos con terceros o empresas externas con fines publicitarios ajenos a Visual Point.
+      </p>
+
+      <div class="mt-12 p-6 bg-brand-celeste/5 rounded-2xl border border-brand-celeste/10">
+        <p class="text-sm m-0">
+          <strong>Última actualización:</strong> {new Date().toLocaleDateString('es-PE', { year: 'numeric', month: 'long', day: 'numeric' })}<br/>
+          Para consultas de privacidad o ejercer derechos ARCO: <a href="mailto:comercial.visualpoint@gmail.com" class="text-brand-celeste hover:underline">comercial.visualpoint@gmail.com</a>.
+        </p>
+      </div>
+
+      <div class="mt-8 pt-8 border-t border-gray-100 italic text-[10px] text-gray-400">
+        <p>
+          Nota: Este documento es una plantilla referencial generada para Visual Point. Para asegurar el cumplimiento total de las normativas legales vigentes, se recomienda la revisión de estos textos por parte de un asesor legal especializado.
+        </p>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

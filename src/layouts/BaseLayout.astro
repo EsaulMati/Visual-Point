@@ -65,36 +65,20 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 <body class="min-h-screen flex flex-col overflow-x-hidden bg-brand-white text-text-primary font-sans antialiased">
   <script is:inline>
     /**
-     * RÉPLICA EXACTA DEL FLUJO SPA (1:1)
+     * Gestión del flujo de navegación y carga (Optimización Astro)
      */
     (function() {
       const isInternalNav = sessionStorage.getItem('vp-navigating') === 'true';
       const path = window.location.pathname;
 
-      // 1. LÓGICA DE INYECCIÓN INICIAL (Síncrona)
-      // Si NO venimos de una transición de Astro (ej. carga inicial o F5),
-      // forzamos el estado de carga (ocultar contenido).
+      // 1. Inyección de estado de carga inicial
       if (!isInternalNav) {
         document.documentElement.classList.add('is-loading');
       } else {
         document.documentElement.classList.remove('is-loading');
       }
 
-      // REDIRECCIÓN FORZADA (Requerimiento del usuario)
-      if (!isInternalNav && path !== '/' && !path.includes('admin') && !window._vpRedirecting) {
-        window._vpRedirecting = true;
-        window.location.href = '/';
-        return;
-      }
-
-      // Singleton protection para los event listeners y procesos pesados
-      if (window._vpInitialized) return;
-      window._vpInitialized = true;
-
-      const getLoader = () => document.getElementById('loading-screen-wrapper');
-      const getOverlay = () => document.getElementById('page-transition-overlay');
-
-      // 2. LÓGICA DE CARGA INICIAL (Diferida al DOM ready)
+      // 2. Lógica de flujo de la aplicación (Loader)
       function initAppFlow() {
         if (!isInternalNav) {
           const loader = getLoader();
@@ -103,7 +87,6 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
             return;
           }
 
-          // Mostrar el cargador por 1.8s (según App.tsx original)
           setTimeout(() => {
             loader.style.transition = 'opacity 0.8s ease-out';
             loader.style.opacity = '0';
@@ -111,7 +94,6 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
             
             setTimeout(() => {
               loader.style.display = 'none';
-              // Revelar el contenido de la web solo después de que el loader se haya ido
               document.documentElement.classList.remove('is-loading');
             }, 800);
           }, 1800);
@@ -122,19 +104,20 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
         }
       }
 
-      // Esperar a que el DOM exista antes de manipularlo
+      const getLoader = () => document.getElementById('loading-screen-wrapper');
+      const getOverlay = () => document.getElementById('page-transition-overlay');
+
       if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', initAppFlow);
       } else {
         initAppFlow();
       }
 
-      // 3. NUEVA LÓGICA DE TRANSICIONES (Fade Overlay Sólido - 100% libre de errores)
+      // 3. Gestión de transiciones de página (Page Overlays)
       document.addEventListener('astro:before-preparation', () => {
         sessionStorage.setItem('vp-navigating', 'true');
         const overlay = getOverlay();
         if (overlay) {
-          // Mostrar transición sólida instantáneamente
           overlay.style.pointerEvents = 'all';
           overlay.style.transition = 'opacity 0.2s ease-out';
           overlay.style.opacity = '1';
@@ -148,7 +131,6 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
         const overlay = getOverlay();
         if (overlay) {
-          // Desvanecer suavemente luego de cargar la nueva página
           setTimeout(() => {
             overlay.style.transition = 'opacity 0.5s ease-in-out';
             overlay.style.opacity = '0';
@@ -158,7 +140,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
         }
       });
 
-      // 4. UTILIDADES & SCROLL
+      // 4. Utilidades generales y control de Scroll
       function initUtils() {
         const bar = document.getElementById('scroll-bar');
         if (bar) {
