@@ -26,10 +26,10 @@ const HOME_DATA = {
     label: "Resultados que hablan",
     title: "Números que nos definen.",
     items: [
-      { value: "1,000+", desc: "Clientes satisfechos" },
+      { value: "100+", desc: "Proyectos exitosos" },
       { value: "99%", desc: "Nos recomiendan" },
       { value: "15+", desc: "Regiones del Perú" },
-      { value: "100+", desc: "Colaboradores" },
+      { value: "20+", desc: "Colaboradores" },
     ],
   },
 };
@@ -561,7 +561,7 @@ function StatItem({
         {hasComma ? count.toLocaleString() : count}
         {suffix}
       </span>
-      <p className="text-gray-400 text-xs md:text-sm font-bold uppercase tracking-widest max-w-[150px] mx-auto whitespace-pre-line leading-relaxed">
+      <p className="text-gray-400 text-xs md:text-sm font-bold uppercase tracking-widest max-w-[150px] mx-auto whitespace-pre-line leading-relaxed text-center">
         {label}
       </p>
     </div>

@@ -91,7 +91,7 @@ export default function StatsCounter({
               <div className="text-4xl sm:text-5xl md:text-6xl font-display font-black text-brand-dark group-hover:text-brand-celeste transition-colors duration-500">
                 <AnimatedNumber value={stat.value} start={startCount} />
               </div>
-              <p className="mt-2 text-text-secondary text-sm md:text-base font-medium">
+              <p className="mt-2 text-text-secondary text-sm md:text-base font-medium text-center">
                 {stat.desc}
               </p>
               <div className="mt-4 w-12 h-0.5 bg-brand-celeste/30 mx-auto group-hover:w-full group-hover:bg-brand-celeste transition-all duration-500" />
