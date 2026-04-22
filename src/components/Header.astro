@@ -10,7 +10,7 @@ const NAV_LINKS = [
 const currentPath = Astro.url.pathname;
 ---
 
-<nav id="navbar" class="fixed top-0 left-0 w-full h-24 sm:h-32 bg-transparent border-none px-4 sm:px-16 flex items-center transition-all duration-700 ease-in-out z-50">
+<nav id="navbar" class="fixed top-0 left-0 w-full h-24 sm:h-32 bg-transparent border-none px-4 sm:px-16 flex items-center transition-all duration-500 ease-in-out z-50">
   <!-- Estado Normal: Logo completo -->
   <div class="nav-state-normal w-full flex items-center justify-between">
     <a href="/" class="flex-shrink-0 -ml-2">
@@ -176,9 +176,16 @@ const currentPath = Astro.url.pathname;
     };
     document.addEventListener('click', outsideClickListener);
     
-    // Lógica de scroll
+    // Lógica de scroll optimizada con histéresis para evitar "rebotes"
+    let wasScrolled = false;
     function handleScroll() {
-      const scrolled = window.scrollY > 50;
+      const scrollPos = window.scrollY;
+      // Umbral con histéresis: 80px para activar, 20px para desactivar
+      const threshold = wasScrolled ? 20 : 80;
+      const scrolled = scrollPos > threshold;
+      
+      if (scrolled === wasScrolled && scrollPos > 0) return;
+      wasScrolled = scrolled;
       
       if (scrolled) {
         if (navbar) {

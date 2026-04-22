@@ -133,6 +133,7 @@
     background: linear-gradient(to left, rgb(249 250 251 / 0.9), transparent);
   }
 
+
   .tech-divider {
     @apply h-px w-full bg-gray-100;
   }
@@ -162,6 +163,10 @@
 
   .glow-celeste {
     box-shadow: 0 0 40px rgba(0, 163, 221, 0.3);
+  }
+
+  .text-glow-subtle {
+    text-shadow: 0 0 20px rgba(0, 163, 221, 0.4);
   }
 
   img {
@@ -378,5 +383,15 @@
   }
   to {
     opacity: 1;
+  }
+}
+
+/* Animación marquesina para carrusel infinito (ESSALUD) */
+@keyframes marquee-scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
   }
 }

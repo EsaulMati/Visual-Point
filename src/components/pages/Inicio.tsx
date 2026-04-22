@@ -344,10 +344,10 @@ export default function Inicio() {
           className="relative z-20 w-full px-4 sm:px-6 md:px-20 text-center md:text-left max-w-7xl mx-auto pt-20 sm:pt-24 md:pt-32"
         >
           <div className="hero-headline">
-            <h1 className="text-3xl sm:text-5xl md:text-8xl lg:text-[clamp(5rem,10vw,8.5rem)] font-display font-black text-brand-dark leading-[0.95] tracking-[-0.04em] mb-6 sm:mb-8">
+            <h1 className="text-5xl sm:text-7xl md:text-8xl lg:text-[clamp(5rem,10vw,8.5rem)] font-display font-black text-brand-dark leading-[0.9] sm:leading-[0.95] tracking-[-0.04em] mb-6 sm:mb-8">
               {HOME_DATA.hero.title}
               <br />
-              <span className="text-brand-celeste">
+              <span className="text-brand-celeste text-glow-subtle">
                 {HOME_DATA.hero.titleAccent}
               </span>
             </h1>

@@ -122,21 +122,17 @@ function DualInfiniteGallery({
 
       const el1 = row1Ref.current;
       const el2 = row2Ref.current;
+      const setWidth1 = el1.scrollWidth / 6;
+      const setWidth2 = el2.scrollWidth / 6;
 
-      // Move row1 left, row2 right
-      el1.scrollLeft += 0.5;
-      el2.scrollLeft -= 0.5;
-
-      // Infinite loop for row1 (2x duplication)
-      const oneHalf1 = el1.scrollWidth / 2;
-      if (el1.scrollLeft >= oneHalf1) {
-        el1.scrollLeft = 0;
+      if (setWidth1 > 0) {
+        el1.scrollLeft += 0.5;
+        if (el1.scrollLeft >= setWidth1 * 4.5) el1.scrollLeft -= setWidth1 * 2;
       }
-
-      // Infinite loop for row2 (2x duplication)
-      const oneHalf2 = el2.scrollWidth / 2;
-      if (el2.scrollLeft <= 0) {
-        el2.scrollLeft = oneHalf2;
+      
+      if (setWidth2 > 0) {
+        el2.scrollLeft -= 0.5;
+        if (el2.scrollLeft <= setWidth2 * 0.5) el2.scrollLeft += setWidth2 * 2;
       }
 
       autoScrollRef.current = requestAnimationFrame(scroll);
@@ -174,17 +170,23 @@ function DualInfiniteGallery({
 
     const el1 = row1Ref.current;
     const el2 = row2Ref.current;
-    const oneHalf1 = el1.scrollWidth / 2;
-    const oneHalf2 = el2.scrollWidth / 2;
+    const setWidth1 = el1.scrollWidth / 6;
+    const setWidth2 = el2.scrollWidth / 6;
+    if (setWidth1 <= 0 || setWidth2 <= 0) {
+      isUpdatingRef.current = false;
+      return;
+    }
 
     // Infinite loop check
-    if (el1.scrollLeft >= oneHalf1 - 5) {
-      el1.scrollLeft = 0;
+    if (el1.scrollLeft >= setWidth1 * 4.5) {
+      el1.scrollLeft -= setWidth1 * 2;
+    } else if (el1.scrollLeft <= setWidth1 * 0.5) {
+      el1.scrollLeft += setWidth1 * 2;
     }
 
     // Sync row2 opposite
-    const ratio = el1.scrollLeft / oneHalf1;
-    el2.scrollLeft = oneHalf2 * (1 - ratio);
+    const ratio = (el1.scrollLeft - setWidth1 * 0.5) / (setWidth1 * 4);
+    el2.scrollLeft = setWidth2 * (4.5 - (ratio * 4));
 
     requestAnimationFrame(() => {
       isUpdatingRef.current = false;
@@ -198,17 +200,19 @@ function DualInfiniteGallery({
 
     const el1 = row1Ref.current;
     const el2 = row2Ref.current;
-    const oneHalf1 = el1.scrollWidth / 2;
-    const oneHalf2 = el2.scrollWidth / 2;
+    const setWidth1 = el1.scrollWidth / 6;
+    const setWidth2 = el2.scrollWidth / 6;
 
     // Infinite loop check
-    if (el2.scrollLeft <= 5) {
-      el2.scrollLeft = oneHalf2;
+    if (el2.scrollLeft >= setWidth2 * 4) {
+      el2.scrollLeft -= setWidth2;
+    } else if (el2.scrollLeft <= setWidth2) {
+      el2.scrollLeft += setWidth2;
     }
 
     // Sync row1 opposite
-    const ratio = el2.scrollLeft / oneHalf2;
-    el1.scrollLeft = oneHalf1 * (1 - ratio);
+    const ratio = (el2.scrollLeft - setWidth2) / (setWidth2 * 3);
+    el1.scrollLeft = setWidth1 * (4 - (ratio * 3));
 
     requestAnimationFrame(() => {
       isUpdatingRef.current = false;
@@ -220,13 +224,23 @@ function DualInfiniteGallery({
     const el2 = row2Ref.current;
     if (!el1 || !el2) return;
 
-    // Start positions (el1 at start, el2 at end for opposite motion)
-    el1.scrollLeft = 0;
-    const oneHalf2 = el2.scrollWidth / 2;
-    el2.scrollLeft = oneHalf2;
+    const centerSliders = () => {
+      const sw1 = el1.scrollWidth;
+      const sw2 = el2.scrollWidth;
+      if (sw1 > 0 && sw2 > 0) {
+        if (el1.scrollLeft === 0) el1.scrollLeft = (sw1 / 6) * 2;
+        if (el2.scrollLeft === 0) el2.scrollLeft = (sw2 / 6) * 3;
+      }
+    };
 
-    // Start auto-scroll
-    const startDelay = setTimeout(() => startAutoScroll(), 100);
+    const ro = new ResizeObserver(() => centerSliders());
+    ro.observe(el1);
+    ro.observe(el2);
+
+    const startDelay = setTimeout(() => {
+      centerSliders();
+      startAutoScroll();
+    }, 300);
 
     // Only pause on direct horizontal interaction (wheel with shift, or touch/drag on gallery)
     const onWheelRow1 = (e: WheelEvent) => {
@@ -251,6 +265,7 @@ function DualInfiniteGallery({
     return () => {
       clearTimeout(startDelay);
       stopAutoScroll();
+      ro.disconnect();
       if (pauseTimeoutRef.current) clearTimeout(pauseTimeoutRef.current);
       el1.removeEventListener("wheel", onWheelRow1);
       el2.removeEventListener("wheel", onWheelRow2);
@@ -267,9 +282,9 @@ function DualInfiniteGallery({
     handleRow2Scroll,
   ]);
 
-  // Duplicate 2x instead of 3x for better performance
-  const doubleRow1 = [...row1Images, ...row1Images];
-  const doubleRow2 = [...row2Images, ...row2Images];
+  // Duplicate 6x for truly infinite feel on 4k+ screens
+  const sixRow1 = [...row1Images, ...row1Images, ...row1Images, ...row1Images, ...row1Images, ...row1Images];
+  const sixRow2 = [...row2Images, ...row2Images, ...row2Images, ...row2Images, ...row2Images, ...row2Images];
 
   return (
     <div className="space-y-3">
@@ -279,7 +294,7 @@ function DualInfiniteGallery({
           ref={row1Ref}
           className="flex gap-4 overflow-x-auto scrollbar-hide"
         >
-          {doubleRow1.map((item, idx) => (
+          {sixRow1.map((item, idx) => (
             <div
               key={`row1-${idx}`}
               className="gallery-img relative overflow-hidden rounded-lg bg-gray-100 group cursor-pointer flex-shrink-0 w-[220px] sm:w-56 md:w-64 lg:w-72 aspect-[4/3]"
@@ -299,7 +314,7 @@ function DualInfiniteGallery({
           ref={row2Ref}
           className="flex gap-4 overflow-x-auto scrollbar-hide"
         >
-          {doubleRow2.map((item, idx) => (
+          {sixRow2.map((item, idx) => (
             <div
               key={`row2-${idx}`}
               className="gallery-img relative overflow-hidden rounded-lg bg-gray-100 group cursor-pointer flex-shrink-0 w-[220px] sm:w-56 md:w-64 lg:w-72 aspect-[4/3]"
@@ -317,111 +332,26 @@ function DualInfiniteGallery({
   );
 }
 
-// Single row infinite gallery (ESSALUD)
+// Carrusel infinito con animación CSS (ESSALUD)
+// Usa translateX en vez de scroll nativo para ser verdaderamente infinito
 interface InfiniteGalleryProps {
   images: GalleryItem[];
   id: string;
 }
 
 function InfiniteGallery({ images, id }: InfiniteGalleryProps) {
-  const scrollRef = useRef<HTMLDivElement>(null);
-  const autoScrollRef = useRef<number | null>(null);
-  const userInteractingRef = useRef(false);
-  const pauseTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  const startAutoScroll = useCallback(() => {
-    if (!scrollRef.current || userInteractingRef.current) return;
-
-    const scroll = () => {
-      if (!scrollRef.current || userInteractingRef.current) return;
-
-      const el = scrollRef.current;
-      el.scrollLeft += 0.5;
-
-      // For 2x duplication, use half point
-      const oneHalf = el.scrollWidth / 2;
-      if (el.scrollLeft >= oneHalf) {
-        el.scrollLeft = 0;
-      }
-
-      autoScrollRef.current = requestAnimationFrame(scroll);
-    };
-
-    autoScrollRef.current = requestAnimationFrame(scroll);
-  }, []);
-
-  const stopAutoScroll = useCallback(() => {
-    if (autoScrollRef.current) {
-      cancelAnimationFrame(autoScrollRef.current);
-      autoScrollRef.current = null;
-    }
-  }, []);
-
-  const handleUserInteraction = useCallback(() => {
-    userInteractingRef.current = true;
-    stopAutoScroll();
-
-    if (pauseTimeoutRef.current) {
-      clearTimeout(pauseTimeoutRef.current);
-    }
-
-    pauseTimeoutRef.current = setTimeout(() => {
-      userInteractingRef.current = false;
-      startAutoScroll();
-    }, 2500);
-  }, [startAutoScroll, stopAutoScroll]);
-
-  const handleScroll = useCallback(() => {
-    if (!scrollRef.current) return;
-
-    const el = scrollRef.current;
-    const oneHalf = el.scrollWidth / 2;
-
-    if (el.scrollLeft >= oneHalf - 5) {
-      el.scrollLeft = 0;
-    }
-  }, []);
-
-  useEffect(() => {
-    const el = scrollRef.current;
-    if (!el) return;
-
-    el.scrollLeft = 0;
-
-    const startDelay = setTimeout(() => startAutoScroll(), 100);
-
-    // Only pause on horizontal scroll interaction
-    const onWheel = (e: WheelEvent) => {
-      if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) {
-        handleUserInteraction();
-      }
-    };
-    const onPointerDown = () => handleUserInteraction();
-
-    el.addEventListener("wheel", onWheel, { passive: true });
-    el.addEventListener("pointerdown", onPointerDown);
-    el.addEventListener("scroll", handleScroll, { passive: true });
-
-    return () => {
-      clearTimeout(startDelay);
-      stopAutoScroll();
-      if (pauseTimeoutRef.current) clearTimeout(pauseTimeoutRef.current);
-      el.removeEventListener("wheel", onWheel);
-      el.removeEventListener("pointerdown", onPointerDown);
-      el.removeEventListener("scroll", handleScroll);
-    };
-  }, [startAutoScroll, stopAutoScroll, handleUserInteraction, handleScroll]);
-
-  // Duplicate 2x for infinite feel with less memory
-  const doubleImages = [...images, ...images];
+  // Duplicamos 2x — la animación CSS recorre la primera mitad y salta al inicio
+  const doubled = [...images, ...images];
 
   return (
-    <div className="infinite-scroll-container">
+    <div className="infinite-scroll-container overflow-hidden">
       <div
-        ref={scrollRef}
-        className="flex gap-4 overflow-x-auto scrollbar-hide"
+        className="marquee-track flex gap-4"
+        style={{
+          width: "max-content",
+        }}
       >
-        {doubleImages.map((item, idx) => (
+        {doubled.map((item, idx) => (
           <div
             key={`${id}-${idx}`}
             className="gallery-img relative overflow-hidden rounded-lg bg-gray-100 group cursor-pointer flex-shrink-0 w-[220px] sm:w-56 md:w-64 lg:w-72 aspect-[4/3]"
