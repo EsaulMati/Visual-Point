@@ -1,8 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import HeroAnimated from '../components/react/HeroAnimated';
-import StatsCounter from '../components/react/StatsCounter';
-import { ArrowRight, MessageCircle } from 'lucide-react';
 
 const HOME_DATA = {
   hero: {
@@ -16,22 +14,7 @@ const HOME_DATA = {
     centerTextMain: "Transformamos espacios con pantallas LED de ",
     centerTextAccent: "máxima definición.",
   },
-  stats: {
-    label: "Resultados que hablan",
-    title: "Números que nos definen.",
-    items: [
-      { value: "100+", desc: "Proyectos exitosos" },
-      { value: "99%", desc: "Nos recomiendan" },
-      { value: "15+", desc: "Regiones del Perú" },
-      { value: "20+", desc: "Colaboradores" },
-    ],
-  },
 };
-
-const BRANDS = [
-  { name: "NovaStar", logo: "/NOVASTAR.png" },
-  { name: "Nationstar", logo: "/Nationstar-logo.jpg" },
-];
 
 const GALLERY_IMGS = [
   "/Cato11.png",
@@ -75,7 +58,7 @@ const GALLERY_IMGS = [
     <div class="grid grid-cols-2 gap-3">
       {["/Imagen15.png", "/Imagen16.png", "/Imagen7.png", "/Imagen1.png"].map((src) => (
         <div class="aspect-square overflow-hidden rounded-xl shadow-lg">
-          <img src={src} alt="" class="w-full h-full object-cover" />
+          <img src={src} alt="" width="1920" height="1072" loading="lazy" decoding="async" class="w-full h-full object-cover" />
         </div>
       ))}
     </div>
@@ -100,6 +83,10 @@ const GALLERY_IMGS = [
           <img
             src="/NOVASTAR.png"
             alt="NovaStar"
+            width="512"
+            height="512"
+            loading="lazy"
+            decoding="async"
             class="h-32 sm:h-40 md:h-48 lg:h-56 w-auto object-contain"
           />
         </div>
@@ -108,6 +95,10 @@ const GALLERY_IMGS = [
           <img
             src="/Nationstar-logo.jpg"
             alt="Nationstar"
+            width="725"
+            height="242"
+            loading="lazy"
+            decoding="async"
             class="h-12 sm:h-14 md:h-16 w-auto object-contain"
           />
         </div>
@@ -131,7 +122,9 @@ const GALLERY_IMGS = [
         >
           <img
             src={img}
-            alt={`Proyecto ${i + 1}`}
+            alt=""
+            loading="lazy"
+            decoding="async"
             class="w-full h-full object-cover saturate-[0.85] brightness-[1.02]"
           />
           <div class="absolute inset-0 bg-gradient-to-t from-white/50 via-transparent to-white/20"></div>
@@ -150,6 +143,8 @@ const GALLERY_IMGS = [
     <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-3 z-30" id="gallery-indicators">
       {GALLERY_IMGS.map((_, i) => (
         <button
+          type="button"
+          aria-label={`Mostrar proyecto ${i + 1}`}
           class="gallery-indicator w-2 h-2 rounded-full transition-all duration-500 bg-brand-dark/20 hover:bg-brand-dark/40"
           data-index={i}
         />
@@ -160,14 +155,6 @@ const GALLERY_IMGS = [
       <div id="gallery-progress" class="h-full bg-gradient-to-r from-brand-celeste to-brand-dark transition-all duration-500 w-0"></div>
     </div>
   </section>
-
-  <!-- Stats Section -->
-  <StatsCounter
-    client:visible
-    label={HOME_DATA.stats.label}
-    title={HOME_DATA.stats.title}
-    items={HOME_DATA.stats.items}
-  />
 
   <!-- CTA Section -->
   <section class="cta-section py-24 md:py-32 bg-brand-dark relative overflow-hidden">
@@ -202,14 +189,20 @@ const GALLERY_IMGS = [
 </BaseLayout>
 
 <script>
-  // Gallery slider functionality
-  const slides = document.querySelectorAll('.gallery-slide');
-  const indicators = document.querySelectorAll('.gallery-indicator');
-  const progress = document.getElementById('gallery-progress');
-  let current = 0;
-  const total = slides.length;
+  let cleanupGallerySlider = () => {};
 
-  function showSlide(index: number) {
+  function initGallerySlider() {
+    cleanupGallerySlider();
+
+    const slides = document.querySelectorAll('.gallery-slide');
+    const indicators = document.querySelectorAll('.gallery-indicator');
+    const progress = document.getElementById('gallery-progress');
+    let current = 0;
+    const total = slides.length;
+
+    if (total === 0) return;
+
+    function showSlide(index: number) {
     slides.forEach((slide, i) => {
       if (i === index) {
         slide.classList.remove('opacity-0');
@@ -243,12 +236,31 @@ const GALLERY_IMGS = [
   showSlide(0);
 
   // Auto-advance
-  setInterval(() => {
-    showSlide((current + 1) % total);
-  }, 5000);
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const intervalId = reduceMotion
+    ? null
+    : window.setInterval(() => {
+        showSlide((current + 1) % total);
+      }, 5000);
 
   // Click handlers
+  const clickHandlers: Array<{ indicator: Element; handler: () => void }> = [];
   indicators.forEach((ind, i) => {
-    ind.addEventListener('click', () => showSlide(i));
+    const handler = () => showSlide(i);
+    ind.addEventListener('click', handler);
+    clickHandlers.push({ indicator: ind, handler });
   });
+
+    cleanupGallerySlider = () => {
+      if (intervalId) clearInterval(intervalId);
+      clickHandlers.forEach(({ indicator, handler }) => {
+        indicator.removeEventListener('click', handler);
+      });
+      cleanupGallerySlider = () => {};
+    };
+  }
+
+  document.addEventListener('astro:page-load', initGallerySlider);
+  document.addEventListener('astro:before-swap', () => cleanupGallerySlider());
+  initGallerySlider();
 </script>

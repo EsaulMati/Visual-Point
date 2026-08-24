@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function LoadingScreen() {
   const [progress, setProgress] = useState(0);
@@ -10,15 +10,15 @@ export default function LoadingScreen() {
           clearInterval(interval);
           return 100;
         }
-        return prev + 1;
+        return Math.min(100, prev + 5);
       });
-    }, 18); // Synced with 1.8s total loading time
+    }, 10);
 
     return () => clearInterval(interval);
   }, []);
 
   return (
-    <div className="fixed inset-0 z-[9999] bg-gradient-to-br from-white via-white to-brand-gray-light flex flex-col items-center justify-center overflow-hidden">
+    <div role="status" aria-label="Cargando sitio" className="fixed inset-0 z-[9999] bg-gradient-to-br from-white via-white to-brand-gray-light flex flex-col items-center justify-center overflow-hidden">
       {/* Ambient background elements */}
       <div className="absolute inset-0 opacity-30">
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-brand-celeste/10 rounded-full blur-3xl animate-pulse" />
@@ -38,7 +38,9 @@ export default function LoadingScreen() {
         {/* Shadow/Background Logo (Grayscale/Light) */}
         <img
           src="/vp-logo-icono.png"
-          alt="Visual Point"
+          alt=""
+          width={1280}
+          height={714}
           className="w-full h-full object-contain opacity-15 grayscale"
         />
 
@@ -50,7 +52,9 @@ export default function LoadingScreen() {
           <div className="absolute bottom-0 left-0 w-40 h-40 md:w-48 md:h-48">
             <img
               src="/vp-logo-icono.png"
-              alt="Visual Point"
+              alt=""
+              width={1280}
+              height={714}
               className="w-full h-full object-contain drop-shadow-lg"
             />
           </div>

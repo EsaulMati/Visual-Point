@@ -18,7 +18,9 @@ export default function DualInfiniteGallery({
   const row2Ref = useRef<HTMLDivElement>(null);
   const autoScrollRef = useRef<number | null>(null);
   const userInteractingRef = useRef(false);
+  const isVisibleRef = useRef(false);
   const pauseTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const syncFrameRef = useRef<number | null>(null);
   const isUpdatingRef = useRef(false);
 
   // Drag state
@@ -26,7 +28,11 @@ export default function DualInfiniteGallery({
   const dragStartRef = useRef({ x: 0, scrollLeft: 0, row: 0 });
 
   const startAutoScroll = useCallback(() => {
-    if (userInteractingRef.current) return;
+    if (
+      userInteractingRef.current ||
+      !isVisibleRef.current ||
+      autoScrollRef.current
+    ) return;
 
     const scroll = () => {
       if (!row1Ref.current || !row2Ref.current || userInteractingRef.current)
@@ -109,8 +115,10 @@ export default function DualInfiniteGallery({
     const ratio = (el1.scrollLeft % oneThird1) / oneThird1;
     el2.scrollLeft = oneThird2 + oneThird2 * (1 - ratio);
 
-    requestAnimationFrame(() => {
+    if (syncFrameRef.current) cancelAnimationFrame(syncFrameRef.current);
+    syncFrameRef.current = requestAnimationFrame(() => {
       isUpdatingRef.current = false;
+      syncFrameRef.current = null;
     });
   }, [wrapScroll]);
 
@@ -130,8 +138,10 @@ export default function DualInfiniteGallery({
     const ratio = (el2.scrollLeft % oneThird2) / oneThird2;
     el1.scrollLeft = oneThird1 + oneThird1 * (1 - ratio);
 
-    requestAnimationFrame(() => {
+    if (syncFrameRef.current) cancelAnimationFrame(syncFrameRef.current);
+    syncFrameRef.current = requestAnimationFrame(() => {
       isUpdatingRef.current = false;
+      syncFrameRef.current = null;
     });
   }, [wrapScroll]);
 
@@ -146,8 +156,14 @@ export default function DualInfiniteGallery({
     el1.scrollLeft = oneThird1;
     el2.scrollLeft = oneThird2 * 2;
 
+    const reduceMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+
     // Start auto-scroll
-    const startDelay = setTimeout(() => startAutoScroll(), 100);
+    const startDelay = reduceMotion
+      ? null
+      : setTimeout(() => startAutoScroll(), 100);
 
     // Only pause on direct horizontal interaction (wheel with shift, or touch/drag on gallery)
     const onWheelRow1 = (e: WheelEvent) => {
@@ -169,10 +185,19 @@ export default function DualInfiniteGallery({
     el1.addEventListener("scroll", handleRow1Scroll, { passive: true });
     el2.addEventListener("scroll", handleRow2Scroll, { passive: true });
 
+    const observer = new IntersectionObserver(([entry]) => {
+      isVisibleRef.current = entry.isIntersecting;
+      if (entry.isIntersecting) startAutoScroll();
+      else stopAutoScroll();
+    }, { rootMargin: "200px" });
+    if (!reduceMotion) observer.observe(el1);
+
     return () => {
-      clearTimeout(startDelay);
+      if (startDelay) clearTimeout(startDelay);
       stopAutoScroll();
       if (pauseTimeoutRef.current) clearTimeout(pauseTimeoutRef.current);
+      if (syncFrameRef.current) cancelAnimationFrame(syncFrameRef.current);
+      observer.disconnect();
       el1.removeEventListener("wheel", onWheelRow1);
       el2.removeEventListener("wheel", onWheelRow2);
       el1.removeEventListener("pointerdown", onPointerDown);
@@ -252,9 +277,9 @@ export default function DualInfiniteGallery({
             >
               <img
                 src={item.src}
-                alt={item.alt || ""}
-                loading="eager"
-                decoding="sync"
+                alt={idx < row1Images.length ? item.alt || "" : ""}
+                loading="lazy"
+                decoding="async"
                 draggable={false}
                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 pointer-events-none"
               />
@@ -280,9 +305,9 @@ export default function DualInfiniteGallery({
             >
               <img
                 src={item.src}
-                alt={item.alt || ""}
-                loading="eager"
-                decoding="sync"
+                alt={idx < row2Images.length ? item.alt || "" : ""}
+                loading="lazy"
+                decoding="async"
                 draggable={false}
                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 pointer-events-none"
               />

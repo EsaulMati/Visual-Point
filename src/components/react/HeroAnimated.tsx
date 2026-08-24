@@ -72,6 +72,9 @@ function GalleryColumn({
           <img
             src={src}
             alt=""
+            loading="lazy"
+            decoding="async"
+            fetchPriority="low"
             className="w-full h-full object-cover"
             referrerPolicy="no-referrer"
           />
@@ -105,6 +108,8 @@ export default function HeroAnimated({
   const galleryCenterRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
     const ctx = gsap.context(() => {
       // Hero text animations
       gsap.from(".hero-headline > *", {
@@ -218,7 +223,7 @@ export default function HeroAnimated({
   return (
     <section
       ref={heroRef}
-      className="relative h-screen flex items-center justify-center overflow-hidden bg-white"
+      className="relative min-h-[100svh] md:h-screen flex items-center justify-center overflow-hidden bg-white"
     >
       {/* Video Background */}
       <div
@@ -230,6 +235,7 @@ export default function HeroAnimated({
           muted
           loop
           playsInline
+          preload="metadata"
           className="absolute inset-0 w-full h-full object-cover scale-105 opacity-[0.08]"
         >
           <source src={videoUrl} type="video/mp4" />
@@ -249,7 +255,7 @@ export default function HeroAnimated({
             <span className="text-brand-celeste">{titleAccent}</span>
           </h1>
         </div>
-        <p className="hero-sub text-base sm:text-lg md:text-xl text-gray-500 max-w-md sm:max-w-xl mx-auto md:mx-0 leading-relaxed mb-8 sm:mb-12 font-medium font-accent text-justify">
+        <p className="hero-sub text-base sm:text-lg md:text-xl text-gray-500 max-w-md sm:max-w-xl mx-auto md:mx-0 leading-relaxed mb-8 sm:mb-12 font-medium font-accent text-center md:text-left">
           {subtitle}
         </p>
         <div className="hero-cta flex flex-wrap justify-center md:justify-start gap-3 sm:gap-4 md:gap-6 mt-6 sm:mt-8 md:mt-16">
@@ -265,7 +271,7 @@ export default function HeroAnimated({
           </a>
           <a
             href={ctaSecondaryLink}
-            className="inline-flex items-center gap-4 sm:gap-6 border-b-2 border-brand-dark/10 py-3 sm:py-4 text-brand-dark font-black text-[9px] sm:text-[10px] uppercase tracking-[0.2em] sm:tracking-[0.3em] font-accent hover:border-brand-celeste transition-all duration-300"
+            className="inline-flex min-h-11 items-center gap-4 sm:gap-6 border-b-2 border-brand-dark/10 py-3 sm:py-4 text-brand-dark font-black text-[9px] sm:text-[10px] uppercase tracking-[0.2em] sm:tracking-[0.3em] font-accent hover:border-brand-celeste transition-all duration-300"
           >
             {ctaSecondaryText}
           </a>
@@ -313,7 +319,7 @@ export default function HeroAnimated({
       </div>
 
       {/* Scroll Indicator */}
-      <div className="scroll-indicator absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 z-40 opacity-40">
+      <div aria-hidden="true" className="scroll-indicator absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 z-40 opacity-40">
         <span className="text-[10px] text-brand-dark uppercase tracking-wider">
           Scroll
         </span>

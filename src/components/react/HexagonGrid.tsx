@@ -110,6 +110,8 @@ export default function HexagonGrid() {
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
     const ctx = gsap.context(() => {
       gsap.from(".hex-wrapper", {
         scrollTrigger: {

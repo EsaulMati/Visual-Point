@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, useCallback } from "react";
+import { useEffect, useRef, useCallback } from "react";
 
 interface GalleryImage {
   src: string;
@@ -21,49 +21,29 @@ export default function InfiniteGallery({
   const scrollerRef = useRef<HTMLDivElement>(null);
   const animationRef = useRef<number | null>(null);
   const isPausedRef = useRef(false);
+  const isVisibleRef = useRef(true);
 
-  // Multiplicamos las imágenes lo suficiente para cubrir cualquier pantalla
-  // Con 4 imágenes a ~288px cada una = ~1152px por set
-  // Necesitamos al menos 3 pantallas de ancho = ~5760px = 5 sets
-  const multiplied = [
-    ...images, ...images, ...images, ...images, ...images,
-    ...images, ...images, ...images, ...images, ...images,
-  ];
+  // Tres copias mantienen una colección completa a cada lado del set visible.
+  const multiplied = [...images, ...images, ...images];
 
   const resetScroll = useCallback(() => {
     const el = scrollerRef.current;
     if (!el) return;
 
-    // Cada set tiene images.length elementos
-    // El ancho de un set = scrollWidth / 10 (porque tenemos 10 copias)
-    const setWidth = el.scrollWidth / 10;
-
-    if (direction === "left") {
-      // Cuando avanzamos demasiado, retrocedemos un set completo
-      if (el.scrollLeft >= setWidth * 6) {
-        el.scrollLeft -= setWidth;
-      }
-      // Si estamos al inicio, avanzamos un set
-      if (el.scrollLeft <= setWidth) {
-        el.scrollLeft += setWidth;
-      }
-    } else {
-      if (el.scrollLeft <= setWidth * 2) {
-        el.scrollLeft += setWidth;
-      }
-      if (el.scrollLeft >= setWidth * 8) {
-        el.scrollLeft -= setWidth;
-      }
-    }
+    const setWidth = el.scrollWidth / 3;
+    if (el.scrollLeft >= setWidth * 2) el.scrollLeft -= setWidth;
+    if (el.scrollLeft <= 0) el.scrollLeft += setWidth;
   }, [direction, images.length]);
 
   useEffect(() => {
     const el = scrollerRef.current;
     if (!el) return;
 
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
     // Posicionar en el centro para tener espacio en ambas direcciones
-    const setWidth = el.scrollWidth / 10;
-    el.scrollLeft = setWidth * 4;
+    const setWidth = el.scrollWidth / 3;
+    el.scrollLeft = setWidth;
 
     const animate = () => {
       if (!isPausedRef.current && el) {
@@ -79,7 +59,7 @@ export default function InfiniteGallery({
 
     // Esperar a que las imágenes carguen para medir correctamente
     const startDelay = setTimeout(() => {
-      el.scrollLeft = el.scrollWidth / 10 * 4;
+      el.scrollLeft = el.scrollWidth / 3;
       animationRef.current = requestAnimationFrame(animate);
     }, 200);
 
@@ -87,11 +67,18 @@ export default function InfiniteGallery({
     const onScroll = () => resetScroll();
     el.addEventListener("scroll", onScroll, { passive: true });
 
+    const observer = new IntersectionObserver(([entry]) => {
+      isVisibleRef.current = entry.isIntersecting;
+      isPausedRef.current = !entry.isIntersecting;
+    }, { rootMargin: "200px" });
+    observer.observe(el);
+
     return () => {
       clearTimeout(startDelay);
       if (animationRef.current) {
         cancelAnimationFrame(animationRef.current);
       }
+      observer.disconnect();
       el.removeEventListener("scroll", onScroll);
     };
   }, [direction, speed, resetScroll]);
@@ -100,7 +87,7 @@ export default function InfiniteGallery({
     <div
       className={`infinite-scroll-container ${className}`}
       onMouseEnter={() => { isPausedRef.current = true; }}
-      onMouseLeave={() => { isPausedRef.current = false; }}
+      onMouseLeave={() => { isPausedRef.current = !isVisibleRef.current; }}
     >
       <div
         ref={scrollerRef}
@@ -114,8 +101,9 @@ export default function InfiniteGallery({
           >
             <img
               src={img.src}
-              alt={img.alt || ""}
-              loading="eager"
+              alt={idx < images.length ? img.alt || "" : ""}
+              loading="lazy"
+              decoding="async"
               draggable={false}
               className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 pointer-events-none"
             />

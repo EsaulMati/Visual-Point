@@ -1,7 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import HexagonGrid from '../components/react/HexagonGrid';
-import { Shield, Award, Users, Target } from 'lucide-react';
 
 const VALUES = [
   { icon: "Shield", title: "Confianza", desc: "Respaldo absoluto en cada instalación." },
@@ -67,17 +66,17 @@ const VALUES = [
   <!-- Values Section -->
   <section class="py-32 px-6 md:px-20 bg-[#FCFCFC]">
     <div class="max-w-7xl mx-auto mb-20 text-left">
-      <h3 class="text-brand-celeste font-bold text-[10px] tracking-widest uppercase mb-4">
+      <p class="text-brand-celeste font-bold text-[10px] tracking-widest uppercase mb-4">
         Filosofía VisualPoint
-      </h3>
+      </p>
       <h2 class="text-3xl md:text-4xl font-display font-bold text-brand-dark">
         Nuestros Valores
       </h2>
       <div class="w-8 h-1 bg-brand-celeste mt-4"></div>
     </div>
 
-    <div class="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-12 text-left">
-      {VALUES.map((val, idx) => (
+    <div class="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 sm:gap-6 md:gap-12 text-left">
+      {VALUES.map((val) => (
         <div class="reveal-text group space-y-4 md:space-y-6">
           <div class="w-12 h-12 md:w-16 md:h-16 bg-brand-celeste md:bg-white border border-transparent md:border-gray-100 rounded-xl md:rounded-2xl flex items-center justify-center text-white md:text-brand-celeste md:group-hover:bg-brand-celeste md:group-hover:text-white transition-all duration-500 shadow-sm">
             {val.icon === "Shield" && (
@@ -108,9 +107,9 @@ const VALUES = [
             )}
           </div>
           <div class="space-y-2 md:space-y-3">
-            <h4 class="text-base md:text-xl font-bold text-brand-dark uppercase tracking-wide">
+            <h3 class="text-base md:text-xl font-bold text-brand-dark uppercase tracking-wide">
               {val.title}
-            </h4>
+            </h3>
             <p class="text-text-secondary leading-relaxed text-xs md:text-sm">
               {val.desc}
             </p>

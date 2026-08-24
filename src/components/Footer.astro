@@ -25,6 +25,8 @@ const NAV_LINKS = [
         <img
           src="/vp-logo.png"
           alt="Visual Point"
+          width="1280"
+          height="714"
           class="h-20 w-auto"
         />
         <p class="text-text-secondary text-sm leading-relaxed max-w-xs">
@@ -34,7 +36,7 @@ const NAV_LINKS = [
 
       <!-- Navigation Links -->
       <div class="md:col-span-4">
-        <h4 class="text-brand-dark/40 font-bold text-xs uppercase tracking-[0.2em] mb-6">Navegación</h4>
+        <p class="text-brand-dark/60 font-bold text-xs uppercase tracking-[0.2em] mb-6">Navegación</p>
         <div class="grid grid-cols-2 gap-x-8 gap-y-4">
           {NAV_LINKS.map((link) => (
             <a
@@ -49,17 +51,21 @@ const NAV_LINKS = [
 
       <!-- Contact -->
       <div class="md:col-span-4">
-        <h4 class="text-brand-dark/40 font-bold text-xs uppercase tracking-[0.2em] mb-6">Contacto Directo</h4>
+        <p class="text-brand-dark/60 font-bold text-xs uppercase tracking-[0.2em] mb-6">Contacto Directo</p>
         <ul class="space-y-4">
           <li>
             <span class="block text-brand-celeste text-xs uppercase tracking-wider font-bold mb-1">Email</span>
-            <a href="mailto:comercial.visualpoint@gmail.com" class="text-brand-dark font-bold text-lg hover:text-brand-celeste transition-colors">
+            <a href="mailto:comercial.visualpoint@gmail.com" class="block max-w-full break-all text-brand-dark font-bold text-base sm:text-lg hover:text-brand-celeste transition-colors">
               comercial.visualpoint@gmail.com
             </a>
           </li>
           <li>
-            <span class="block text-brand-celeste text-xs uppercase tracking-wider font-bold mb-1">Región</span>
-            <span class="text-brand-dark font-bold text-lg">Lima, Perú</span>
+            <span class="block text-brand-celeste text-xs uppercase tracking-wider font-bold mb-1">Sedes</span>
+            <span class="text-brand-dark font-bold text-lg">Arequipa, Trujillo y Lima</span>
+          </li>
+          <li>
+            <span class="block text-brand-celeste text-xs uppercase tracking-wider font-bold mb-1">Cobertura</span>
+            <span class="text-brand-dark font-bold text-lg">Atención en todo el Perú</span>
           </li>
         </ul>
       </div>

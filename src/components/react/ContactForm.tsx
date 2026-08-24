@@ -114,6 +114,10 @@ interface CountryType {
 
 export default function ContactForm() {
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const countryButtonRef = useRef<HTMLButtonElement>(null);
+  const countrySearchRef = useRef<HTMLInputElement>(null);
+  const successTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const submitControllerRef = useRef<AbortController | null>(null);
   const [formLoadTime] = useState(() => Date.now());
 
   const [formData, setFormData] = useState({
@@ -134,6 +138,11 @@ export default function ContactForm() {
   const [isSuccess, setIsSuccess] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+  const [submitError, setSubmitError] = useState("");
+
+  useEffect(() => {
+    if (isDropdownOpen) countrySearchRef.current?.focus();
+  }, [isDropdownOpen]);
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -145,8 +154,49 @@ export default function ContactForm() {
       }
     }
     document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      if (successTimeoutRef.current) clearTimeout(successTimeoutRef.current);
+      submitControllerRef.current?.abort();
+    };
   }, []);
+
+  const closeCountryMenu = (restoreFocus = false) => {
+    setIsDropdownOpen(false);
+    setSearchTerm("");
+    if (restoreFocus) requestAnimationFrame(() => countryButtonRef.current?.focus());
+  };
+
+  const handleCountryOptionKeyDown = (
+    event: React.KeyboardEvent<HTMLButtonElement>,
+  ) => {
+    const options = Array.from(
+      dropdownRef.current?.querySelectorAll<HTMLButtonElement>(
+        "[data-country-option]",
+      ) || [],
+    );
+    const currentIndex = options.indexOf(event.currentTarget);
+    let targetIndex = currentIndex;
+    if (event.key === "ArrowDown") targetIndex = (currentIndex + 1) % options.length;
+    else if (event.key === "ArrowUp") targetIndex = (currentIndex - 1 + options.length) % options.length;
+    else if (event.key === "Home") targetIndex = 0;
+    else if (event.key === "End") targetIndex = options.length - 1;
+    else if (event.key === "Escape") {
+      event.preventDefault();
+      closeCountryMenu(true);
+      return;
+    } else return;
+    event.preventDefault();
+    options[targetIndex]?.focus();
+  };
+
+  const scheduleSuccessReset = () => {
+    if (successTimeoutRef.current) clearTimeout(successTimeoutRef.current);
+    successTimeoutRef.current = setTimeout(() => {
+      setIsSuccess(false);
+      successTimeoutRef.current = null;
+    }, 5000);
+  };
 
   const filteredCountries = useMemo(() => {
     return COUNTRY_DATA.filter(
@@ -217,6 +267,7 @@ export default function ContactForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setSubmitError("");
 
     const allTouched = Object.keys(formData).reduce(
       (acc, k) => ({ ...acc, [k]: true }),
@@ -234,15 +285,23 @@ export default function ContactForm() {
 
     if (Object.keys(newErrors).length === 0) {
       const timeSpent = (Date.now() - formLoadTime) / 1000;
-      if (formData.website || timeSpent < 3) {
+      if (formData.website) {
         setIsSuccess(true);
-        setTimeout(() => setIsSuccess(false), 5000);
+        scheduleSuccessReset();
+        return;
+      }
+      if (timeSpent < 3) {
+        setSubmitError("Espera unos segundos antes de enviar el formulario.");
         return;
       }
 
       setIsSubmitting(true);
 
       try {
+        submitControllerRef.current?.abort();
+        const submitController = new AbortController();
+        submitControllerRef.current = submitController;
+
         const url =
           "https://script.google.com/macros/s/AKfycbzqAe2IVa13KyIy_37DRuD9sJ6YznWFIDqG8sw8SansFemGIiBVDw4RiQ8PfgkDrcWYbQ/exec";
 
@@ -257,14 +316,37 @@ export default function ContactForm() {
         postData.append("asunto", formData.asunto);
         postData.append("mensaje", formData.mensaje);
 
-        await fetch(url, {
+        const response = await fetch(url, {
           method: "POST",
-          mode: "no-cors",
           body: postData,
+          signal: submitController.signal,
         });
 
-        setIsSubmitting(false);
+        if (!response.ok) {
+          throw new Error(`El servidor respondió con estado ${response.status}`);
+        }
+
+        const responseText = (await response.text()).trim();
+        let confirmed = ["ok", "success"].includes(responseText.toLowerCase());
+
+        if (responseText) {
+          try {
+            const result = JSON.parse(responseText) as Record<string, unknown>;
+            confirmed =
+              result.success === true ||
+              result.status === "success" ||
+              result.result === "success";
+          } catch {
+            // Solo se admite una confirmación de texto exacta: "ok" o "success".
+          }
+        }
+
+        if (!confirmed) {
+          throw new Error("El servidor no confirmó que el mensaje fuera guardado");
+        }
+
         setIsSuccess(true);
+        setSubmitError("");
         setFormData({
           nombre: "",
           empresa: "",
@@ -277,25 +359,28 @@ export default function ContactForm() {
           website: "",
         });
         setTouched({});
-        setTimeout(() => setIsSuccess(false), 5000);
+        scheduleSuccessReset();
       } catch (error) {
-        setIsSubmitting(false);
+        if (error instanceof DOMException && error.name === "AbortError") return;
         console.error("Error enviando datos:", error);
-        alert(
+        setSubmitError(
           "Ocurrió un error al enviar el formulario. Por favor, intenta de nuevo.",
         );
+      } finally {
+        submitControllerRef.current = null;
+        setIsSubmitting(false);
       }
     }
   };
 
   if (isSuccess) {
     return (
-      <div className="py-24 text-center space-y-8 animate-in fade-in zoom-in duration-700">
+      <div role="status" aria-live="polite" className="py-16 sm:py-24 text-center space-y-8 animate-in fade-in zoom-in duration-700">
         <div className="w-28 h-28 bg-green-50 text-green-500 rounded-full flex items-center justify-center mx-auto shadow-2xl">
-          <CheckCircle2 size={56} className="animate-pulse" />
+          <CheckCircle2 aria-hidden="true" size={56} className="animate-pulse" />
         </div>
         <div className="space-y-4">
-          <h2 className="text-5xl font-display font-black text-brand-dark tracking-tighter">
+          <h2 className="text-3xl sm:text-5xl font-display font-black text-brand-dark tracking-tighter">
             ¡Mensaje Enviado!
           </h2>
           <p className="text-xl text-text-secondary max-w-md mx-auto">
@@ -316,7 +401,7 @@ export default function ContactForm() {
   return (
     <form
       onSubmit={handleSubmit}
-      className="grid grid-cols-1 lg:grid-cols-2 gap-x-16 gap-y-12"
+      className="grid grid-cols-1 lg:grid-cols-2 gap-x-16 gap-y-10 sm:gap-y-12"
     >
       {/* Honeypot field */}
       <input
@@ -326,15 +411,17 @@ export default function ContactForm() {
         onChange={handleChange}
         className="hidden"
         tabIndex={-1}
+        aria-hidden="true"
         autoComplete="off"
       />
 
       {/* Left Column */}
-      <div className="space-y-12">
+      <div className="space-y-10 sm:space-y-12">
         {/* Nombre */}
         <div className="space-y-4">
           <label
-            className={`text-[10px] uppercase font-black tracking-[0.3em] transition-colors font-accent ${errors.nombre && touched.nombre ? "text-red-500" : "text-brand-dark/30"}`}
+            htmlFor="nombre"
+            className={`text-[10px] uppercase font-black tracking-[0.3em] transition-colors font-accent ${errors.nombre && touched.nombre ? "text-red-500" : "text-brand-dark/60"}`}
           >
             Nombre del Solicitante
           </label>
@@ -342,21 +429,24 @@ export default function ContactForm() {
             <div
               className={`absolute top-0 left-0 w-11 h-full flex items-center justify-center text-brand-dark/20 ${errors.nombre && touched.nombre ? "text-red-400" : "group-focus-within:text-brand-celeste transition-colors"}`}
             >
-              <User size={18} />
+              <User aria-hidden="true" size={18} />
             </div>
             <input
               type="text"
+              id="nombre"
               name="nombre"
               value={formData.nombre}
               onChange={handleChange}
               onBlur={() => handleBlur("nombre")}
+              aria-invalid={Boolean(errors.nombre && touched.nombre)}
+              aria-describedby={errors.nombre && touched.nombre ? "nombre-error" : undefined}
               className={`w-full bg-white border-b-2 py-4 pl-12 pr-4 outline-none transition-all text-brand-dark font-medium ${errors.nombre && touched.nombre ? "border-red-500 bg-red-50" : "border-gray-100 focus:border-brand-celeste"}`}
               placeholder="Juan Pérez"
             />
           </div>
           {errors.nombre && touched.nombre && (
-            <p className="text-[10px] font-bold text-red-500 uppercase tracking-widest flex items-center gap-2">
-              <AlertCircle size={12} /> {errors.nombre}
+            <p id="nombre-error" role="alert" className="text-[10px] font-bold text-red-500 uppercase tracking-widest flex items-center gap-2">
+              <AlertCircle aria-hidden="true" size={12} /> {errors.nombre}
             </p>
           )}
         </div>
@@ -364,7 +454,8 @@ export default function ContactForm() {
         {/* Empresa */}
         <div className="space-y-4">
           <label
-            className={`text-[10px] uppercase font-black tracking-[0.3em] transition-colors font-accent ${errors.empresa && touched.empresa ? "text-red-500" : "text-brand-dark/30"}`}
+            htmlFor="empresa"
+            className={`text-[10px] uppercase font-black tracking-[0.3em] transition-colors font-accent ${errors.empresa && touched.empresa ? "text-red-500" : "text-brand-dark/60"}`}
           >
             Organización / Corporativo
           </label>
@@ -372,21 +463,24 @@ export default function ContactForm() {
             <div
               className={`absolute top-0 left-0 w-11 h-full flex items-center justify-center text-brand-dark/20 ${errors.empresa && touched.empresa ? "text-red-400" : "group-focus-within:text-brand-celeste transition-colors"}`}
             >
-              <Building2 size={18} />
+              <Building2 aria-hidden="true" size={18} />
             </div>
             <input
               type="text"
+              id="empresa"
               name="empresa"
               value={formData.empresa}
               onChange={handleChange}
               onBlur={() => handleBlur("empresa")}
+              aria-invalid={Boolean(errors.empresa && touched.empresa)}
+              aria-describedby={errors.empresa && touched.empresa ? "empresa-error" : undefined}
               className={`w-full bg-white border-b-2 py-4 pl-12 pr-4 outline-none transition-all text-brand-dark font-medium ${errors.empresa && touched.empresa ? "border-red-500 bg-red-50" : "border-gray-100 focus:border-brand-celeste"}`}
               placeholder="Digital Media Inc."
             />
           </div>
           {errors.empresa && touched.empresa && (
-            <p className="text-[10px] font-bold text-red-500 uppercase tracking-widest flex items-center gap-2">
-              <AlertCircle size={12} /> {errors.empresa}
+            <p id="empresa-error" role="alert" className="text-[10px] font-bold text-red-500 uppercase tracking-widest flex items-center gap-2">
+              <AlertCircle aria-hidden="true" size={12} /> {errors.empresa}
             </p>
           )}
         </div>
@@ -394,7 +488,8 @@ export default function ContactForm() {
         {/* Email */}
         <div className="space-y-4">
           <label
-            className={`text-[10px] uppercase font-black tracking-[0.3em] transition-colors font-accent ${errors.email && touched.email ? "text-red-500" : "text-brand-dark/30"}`}
+            htmlFor="email"
+            className={`text-[10px] uppercase font-black tracking-[0.3em] transition-colors font-accent ${errors.email && touched.email ? "text-red-500" : "text-brand-dark/60"}`}
           >
             Correo Corporativo
           </label>
@@ -402,76 +497,100 @@ export default function ContactForm() {
             <div
               className={`absolute top-0 left-0 w-11 h-full flex items-center justify-center text-brand-dark/20 ${errors.email && touched.email ? "text-red-400" : "group-focus-within:text-brand-celeste transition-colors"}`}
             >
-              <AtSign size={18} />
+              <AtSign aria-hidden="true" size={18} />
             </div>
             <input
               type="email"
+              id="email"
               name="email"
               value={formData.email}
               onChange={handleChange}
               onBlur={() => handleBlur("email")}
+              aria-invalid={Boolean(errors.email && touched.email)}
+              aria-describedby={errors.email && touched.email ? "email-error" : undefined}
               className={`w-full bg-white border-b-2 py-4 pl-12 pr-4 outline-none transition-all text-brand-dark font-medium ${errors.email && touched.email ? "border-red-500 bg-red-50" : "border-gray-100 focus:border-brand-celeste"}`}
               placeholder="contacto@empresa.com"
             />
           </div>
           {errors.email && touched.email && (
-            <p className="text-[10px] font-bold text-red-500 uppercase tracking-widest flex items-center gap-2">
-              <AlertCircle size={12} /> {errors.email}
+            <p id="email-error" role="alert" className="text-[10px] font-bold text-red-500 uppercase tracking-widest flex items-center gap-2">
+              <AlertCircle aria-hidden="true" size={12} /> {errors.email}
             </p>
           )}
         </div>
       </div>
 
       {/* Right Column */}
-      <div className="space-y-12">
+      <div className="space-y-10 sm:space-y-12">
         {/* Teléfono */}
         <div className="space-y-4">
           <label
-            className={`text-[10px] uppercase font-black tracking-[0.3em] transition-colors font-accent ${errors.telefono && touched.telefono ? "text-red-500" : "text-brand-dark/30"}`}
+            htmlFor="telefono"
+            className={`text-[10px] uppercase font-black tracking-[0.3em] transition-colors font-accent ${errors.telefono && touched.telefono ? "text-red-500" : "text-brand-dark/60"}`}
           >
             Teléfono de Contacto
           </label>
           <div
-            className={`flex gap-3 border-b-2 transition-all p-1 items-center relative ${errors.telefono && touched.telefono ? "border-red-500 bg-red-50" : "border-gray-100 group focus-within:border-brand-celeste"}`}
+            className={`flex gap-2 sm:gap-3 border-b-2 transition-all p-1 items-center relative min-w-0 ${errors.telefono && touched.telefono ? "border-red-500 bg-red-50" : "border-gray-100 group focus-within:border-brand-celeste"}`}
           >
             <div className="relative shrink-0" ref={dropdownRef}>
               <button
+                ref={countryButtonRef}
                 type="button"
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                className="flex items-center gap-3 px-4 py-3 bg-gray-50 rounded-2xl hover:bg-gray-100 transition-colors border border-gray-100"
+                aria-expanded={isDropdownOpen}
+                aria-controls="country-menu"
+                aria-haspopup="true"
+                aria-label={`Seleccionar país. Actual: ${formData.country.name} ${formData.country.code}`}
+                className="flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-3 bg-gray-50 rounded-2xl hover:bg-gray-100 transition-colors border border-gray-100"
               >
                 <span className="text-xl">{formData.country.flag}</span>
                 <span className="font-bold text-brand-dark text-sm">
                   {formData.country.code}
                 </span>
                 <ChevronDown
+                  aria-hidden="true"
                   size={14}
                   className={`text-brand-dark/30 transition-transform ${isDropdownOpen ? "rotate-180" : ""}`}
                 />
               </button>
 
               {isDropdownOpen && (
-                <div className="absolute top-14 left-0 w-64 bg-white border border-gray-100 rounded-3xl shadow-2xl z-50 overflow-hidden">
+                <div id="country-menu" aria-label="Seleccionar país" className="absolute top-14 left-0 w-[min(16rem,calc(100vw-7rem))] bg-white border border-gray-100 rounded-3xl shadow-2xl z-50 overflow-hidden">
                   <div className="p-4 border-b border-gray-50 flex items-center gap-3 bg-gray-50/50">
-                    <Search size={14} className="text-brand-dark/30" />
+                    <Search aria-hidden="true" size={14} className="text-brand-dark/40" />
+                    <label htmlFor="country-search" className="sr-only">Buscar país</label>
                     <input
+                      ref={countrySearchRef}
+                      id="country-search"
                       type="text"
                       placeholder="Buscar país..."
                       className="bg-transparent border-none outline-none text-xs w-full py-1 font-bold text-brand-dark"
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
+                      onKeyDown={(event) => {
+                        if (event.key === "Escape") {
+                          event.preventDefault();
+                          closeCountryMenu(true);
+                        } else if (event.key === "ArrowDown") {
+                          event.preventDefault();
+                          dropdownRef.current?.querySelector<HTMLButtonElement>("[data-country-option]")?.focus();
+                        }
+                      }}
                     />
                   </div>
                   <div className="max-h-60 overflow-y-auto">
                     {filteredCountries.map((c) => (
                       <button
                         key={c.code}
+                        data-country-option
                         type="button"
                         onClick={() => {
                           setFormData((prev) => ({ ...prev, country: c }));
-                          setIsDropdownOpen(false);
-                          setSearchTerm("");
+                          closeCountryMenu(true);
                         }}
+                        onKeyDown={handleCountryOptionKeyDown}
+                        aria-pressed={formData.country.code === c.code}
                         className="flex items-center justify-between w-full p-4 hover:bg-brand-celeste/5 text-left border-b border-gray-50 last:border-0 transition-colors"
                       >
                         <div className="flex items-center gap-4">
@@ -487,6 +606,7 @@ export default function ContactForm() {
                         </div>
                         {formData.country.code === c.code && (
                           <CheckCircle2
+                            aria-hidden="true"
                             size={14}
                             className="text-brand-celeste"
                           />
@@ -500,6 +620,7 @@ export default function ContactForm() {
 
             <input
               type="tel"
+              id="telefono"
               name="telefono"
               value={formData.telefono}
               onChange={(e) => {
@@ -513,17 +634,19 @@ export default function ContactForm() {
                 }
               }}
               onBlur={() => handleBlur("telefono")}
-              className="w-full bg-transparent py-4 text-brand-dark font-black tracking-[0.2em] outline-none placeholder:tracking-normal placeholder:font-medium placeholder:text-brand-dark/20"
+              aria-invalid={Boolean(errors.telefono && touched.telefono)}
+              aria-describedby={errors.telefono && touched.telefono ? "telefono-error" : undefined}
+              className="min-w-0 flex-1 bg-transparent py-4 text-sm sm:text-base text-brand-dark font-black tracking-[0.1em] sm:tracking-[0.2em] outline-none placeholder:tracking-normal placeholder:font-medium placeholder:text-brand-dark/20"
               placeholder={`${formData.country.len} dígitos...`}
             />
 
-            <div className="pr-4 text-brand-dark/20 shrink-0">
-              <PhoneIcon size={20} strokeWidth={1.5} />
+            <div className="hidden sm:block pr-4 text-brand-dark/20 shrink-0">
+              <PhoneIcon aria-hidden="true" size={20} strokeWidth={1.5} />
             </div>
           </div>
           {errors.telefono && touched.telefono && (
-            <p className="text-[10px] font-bold text-red-500 uppercase tracking-widest flex items-center gap-2 px-2">
-              <AlertCircle size={12} /> {errors.telefono}
+            <p id="telefono-error" role="alert" className="text-[10px] font-bold text-red-500 uppercase tracking-widest flex items-center gap-2 px-2">
+              <AlertCircle aria-hidden="true" size={12} /> {errors.telefono}
             </p>
           )}
         </div>
@@ -531,22 +654,26 @@ export default function ContactForm() {
         {/* Asunto */}
         <div className="space-y-4">
           <label
-            className={`text-[10px] uppercase font-black tracking-[0.3em] transition-colors font-accent ${errors.asunto && touched.asunto ? "text-red-500" : "text-brand-dark/30"}`}
+            htmlFor="asunto"
+            className={`text-[10px] uppercase font-black tracking-[0.3em] transition-colors font-accent ${errors.asunto && touched.asunto ? "text-red-500" : "text-brand-dark/60"}`}
           >
             Asunto del Requerimiento
           </label>
           <input
             type="text"
+            id="asunto"
             name="asunto"
             value={formData.asunto}
             onChange={handleChange}
             onBlur={() => handleBlur("asunto")}
+            aria-invalid={Boolean(errors.asunto && touched.asunto)}
+            aria-describedby={errors.asunto && touched.asunto ? "asunto-error" : undefined}
             className={`w-full bg-white border-b-2 py-4 pr-4 outline-none transition-all text-brand-dark font-medium ${errors.asunto && touched.asunto ? "border-red-500 bg-red-50" : "border-gray-100 focus:border-brand-celeste"}`}
             placeholder="Tipo de pantalla / Solución..."
           />
           {errors.asunto && touched.asunto && (
-            <p className="text-[10px] font-bold text-red-500 uppercase tracking-widest flex items-center gap-2">
-              <AlertCircle size={12} /> {errors.asunto}
+            <p id="asunto-error" role="alert" className="text-[10px] font-bold text-red-500 uppercase tracking-widest flex items-center gap-2">
+              <AlertCircle aria-hidden="true" size={12} /> {errors.asunto}
             </p>
           )}
         </div>
@@ -554,22 +681,26 @@ export default function ContactForm() {
         {/* Mensaje */}
         <div className="space-y-4">
           <label
-            className={`text-[10px] uppercase font-black tracking-[0.3em] transition-colors font-accent ${errors.mensaje && touched.mensaje ? "text-red-500" : "text-brand-dark/30"}`}
+            htmlFor="mensaje"
+            className={`text-[10px] uppercase font-black tracking-[0.3em] transition-colors font-accent ${errors.mensaje && touched.mensaje ? "text-red-500" : "text-brand-dark/60"}`}
           >
             Describe tu Proyecto
           </label>
           <textarea
+            id="mensaje"
             name="mensaje"
             value={formData.mensaje}
             onChange={handleChange}
             onBlur={() => handleBlur("mensaje")}
+            aria-invalid={Boolean(errors.mensaje && touched.mensaje)}
+            aria-describedby={errors.mensaje && touched.mensaje ? "mensaje-error" : undefined}
             rows={4}
             className={`w-full bg-white border-2 rounded-2xl py-4 px-4 outline-none transition-all text-brand-dark font-medium resize-none ${errors.mensaje && touched.mensaje ? "border-red-500 bg-red-50" : "border-gray-100 focus:border-brand-celeste"}`}
             placeholder="Cuéntanos sobre tu proyecto, dimensiones, ubicación..."
           />
           {errors.mensaje && touched.mensaje && (
-            <p className="text-[10px] font-bold text-red-500 uppercase tracking-widest flex items-center gap-2">
-              <AlertCircle size={12} /> {errors.mensaje}
+            <p id="mensaje-error" role="alert" className="text-[10px] font-bold text-red-500 uppercase tracking-widest flex items-center gap-2">
+              <AlertCircle aria-hidden="true" size={12} /> {errors.mensaje}
             </p>
           )}
         </div>
@@ -578,17 +709,21 @@ export default function ContactForm() {
       {/* Full Width Section */}
       <div className="lg:col-span-2 space-y-8">
         {/* Privacy Checkbox */}
-        <label className="flex items-start gap-4 cursor-pointer group">
-          <div className="relative mt-1">
+        <div className="flex items-start gap-4 group">
+          <label htmlFor="privacy" className="relative mt-1 cursor-pointer">
             <input
               type="checkbox"
+              id="privacy"
               name="privacy"
               checked={formData.privacy}
               onChange={handleChange}
+              aria-invalid={Boolean(errors.privacy && touched.privacy)}
+              aria-describedby={errors.privacy && touched.privacy ? "privacy-error" : undefined}
+              aria-label="Acepto la Política de Privacidad y el tratamiento de mis datos personales"
               className="sr-only peer"
             />
             <div
-              className={`w-6 h-6 rounded-lg border-2 flex items-center justify-center transition-all ${formData.privacy ? "bg-brand-celeste border-brand-celeste" : errors.privacy && touched.privacy ? "border-red-500" : "border-gray-200 group-hover:border-brand-celeste/50"}`}
+              className={`w-6 h-6 rounded-lg border-2 flex items-center justify-center transition-all peer-focus-visible:ring-2 peer-focus-visible:ring-brand-celeste peer-focus-visible:ring-offset-2 ${formData.privacy ? "bg-brand-celeste border-brand-celeste" : errors.privacy && touched.privacy ? "border-red-500" : "border-gray-200 group-hover:border-brand-celeste/50"}`}
             >
               {formData.privacy && (
                 <svg
@@ -606,7 +741,7 @@ export default function ContactForm() {
                 </svg>
               )}
             </div>
-          </div>
+          </label>
           <span className="text-sm text-text-secondary leading-relaxed">
             He leído y acepto la{" "}
             <a
@@ -617,10 +752,16 @@ export default function ContactForm() {
             </a>{" "}
             y autorizo el tratamiento de mis datos personales.
           </span>
-        </label>
+        </div>
         {errors.privacy && touched.privacy && (
-          <p className="text-[10px] font-bold text-red-500 uppercase tracking-widest flex items-center gap-2">
-            <AlertCircle size={12} /> {errors.privacy}
+          <p id="privacy-error" role="alert" className="text-[10px] font-bold text-red-500 uppercase tracking-widest flex items-center gap-2">
+            <AlertCircle aria-hidden="true" size={12} /> {errors.privacy}
+          </p>
+        )}
+
+        {submitError && (
+          <p role="alert" aria-live="assertive" className="text-sm font-bold text-red-600">
+            {submitError}
           </p>
         )}
 
@@ -632,12 +773,12 @@ export default function ContactForm() {
         >
           {isSubmitting ? (
             <>
-              <span className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+              <span aria-hidden="true" className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
               Enviando...
             </>
           ) : (
             <>
-              <Send size={18} />
+              <Send aria-hidden="true" size={18} />
               Enviar Mensaje
             </>
           )}

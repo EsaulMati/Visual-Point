@@ -3,7 +3,7 @@
 // Se activa solo cuando navegas entre páginas (no al refrescar)
 ---
 
-<div id="page-transition-overlay" class="page-transition-overlay" transition:persist>
+<div id="page-transition-overlay" aria-hidden="true" class="page-transition-overlay" transition:persist>
   <!-- Animated geometric lines -->
   <div class="absolute inset-0 opacity-[0.08]">
     <div class="absolute top-[15%] left-0 w-full h-px bg-white"></div>
@@ -26,7 +26,9 @@
   <div class="flex flex-col items-center gap-6 z-10">
     <img
       src="/vp-logo-icono.png"
-      alt="VP"
+      alt=""
+      width="1280"
+      height="714"
       class="transition-logo w-28 md:w-36 h-auto object-contain"
     />
     <span class="text-white/40 text-[9px] uppercase tracking-[0.4em] font-black">
